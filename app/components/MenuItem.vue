@@ -1,142 +1,142 @@
 <template>
-  <div class="menu-item">
-    <div class="item-image-container" v-if="item.image">
-      <img :src="item.image" :alt="item.en" class="item-image" />
+  <div class="menu-row" :class="{ 'no-border': isLast }">
+    <img v-if="item.image" :src="item.image" :alt="item.en" class="row-image" />
+    <div class="row-info">
+      <div class="row-name">{{ item.en }}</div>
+      <div class="row-khmer">{{ item.kh }}</div>
+      <div class="row-chinese">{{ item.zh }}</div>
+      <div class="row-price">${{ item.price.toFixed(2) }}</div>
     </div>
-    <div class="item-content">
-      <div class="item-info">
-        <div class="item-langs">
-          <h3 class="khmer">{{ item.kh }}</h3>
-          <p class="english">{{ item.en }}</p>
-          <p class="chinese">{{ item.zh }}</p>
-        </div>
-        <div class="item-price">${{ item.price.toFixed(2) }}</div>
-      </div>
-      <button class="add-btn" @click="addToCart(item)">
-        <span class="icon">+</span> Add to Cart
-      </button>
-    </div>
+    <button class="add-btn" @click="handleAdd">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </button>
+    <!-- Toast feedback -->
+    <Transition name="toast">
+      <div class="added-toast" v-if="showToast">Added ✓</div>
+    </Transition>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
 const props = defineProps({
   item: {
     type: Object,
     required: true
+  },
+  isLast: {
+    type: Boolean,
+    default: false
   }
 })
 const { addToCart } = useCart()
+const showToast = ref(false)
+
+const handleAdd = () => {
+  addToCart(props.item)
+  showToast.value = true
+  setTimeout(() => { showToast.value = false }, 800)
+}
 </script>
 
 <style scoped>
-.menu-item {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+.menu-row {
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid rgba(0,0,0,0.02);
+  align-items: center;
+  padding: 10px 16px;
+  gap: 12px;
+  border-bottom: 0.5px solid rgba(60, 60, 67, 0.12);
+  position: relative;
+  transition: background 0.15s;
 }
-.menu-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+.menu-row:active {
+  background: rgba(0,0,0,0.02);
 }
-.item-image-container {
-  width: 100%;
-  height: 120px;
-  overflow: hidden;
-  background: #f5f5f5;
+.menu-row.no-border {
+  border-bottom: none;
 }
-@media (min-width: 640px) {
-  .item-image-container {
-    height: 200px;
-  }
-}
-.item-image {
-  width: 100%;
-  height: 100%;
+.row-image {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  flex-shrink: 0;
 }
-.menu-item:hover .item-image {
-  transform: scale(1.05);
-}
-.item-content {
-  padding: 0.75rem;
-  display: flex;
-  flex-direction: column;
+.row-info {
   flex: 1;
-  justify-content: space-between;
+  min-width: 0;
 }
-@media (min-width: 640px) {
-  .item-content {
-    padding: 1.25rem;
-  }
+.row-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #000;
+  letter-spacing: -0.3px;
 }
-.item-info {
-  margin-bottom: 1rem;
+.row-khmer {
+  font-size: 14px;
+  color: #3c3c43;
+  margin-top: 1px;
+  opacity: 0.7;
 }
-.khmer {
-  font-family: 'Khmer OS', 'Suwannaphum', sans-serif;
-  font-size: 0.9rem;
-  margin: 0 0 0.25rem 0;
-  color: var(--text-dark, #2d3436);
+.row-chinese {
+  font-size: 12px;
+  color: #8e8e93;
+  margin-top: 1px;
 }
-@media (min-width: 640px) {
-  .khmer {
-    font-size: 1.1rem;
-  }
-}
-.english, .chinese {
-  font-size: 0.75rem;
-  color: var(--text-muted, #636e72);
-  margin: 0 0 0.1rem 0;
-}
-@media (min-width: 640px) {
-  .english, .chinese {
-    font-size: 0.9rem;
-  }
-}
-.item-price {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--primary-color, #c48b5d);
-  margin-top: 0.5rem;
-}
-@media (min-width: 640px) {
-  .item-price {
-    font-size: 1.25rem;
-  }
+.row-price {
+  font-size: 15px;
+  font-weight: 600;
+  color: #007aff;
+  margin-top: 3px;
 }
 .add-btn {
-  background: var(--primary-color, #c48b5d);
-  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   border: none;
-  padding: 0.5rem;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.85rem;
+  background: rgba(0, 122, 255, 0.1);
+  color: #007aff;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
-  transition: background 0.2s ease, transform 0.1s ease;
-}
-@media (min-width: 640px) {
-  .add-btn {
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    gap: 0.5rem;
-  }
-}
-.add-btn:hover {
-  background: var(--primary-hover, #a9754b);
+  flex-shrink: 0;
+  transition: background 0.15s, transform 0.1s;
 }
 .add-btn:active {
-  transform: scale(0.98);
+  background: rgba(0, 122, 255, 0.2);
+  transform: scale(0.92);
+}
+
+/* Toast animation */
+.added-toast {
+  position: absolute;
+  top: 50%;
+  right: 60px;
+  transform: translateY(-50%);
+  background: #30d158;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  pointer-events: none;
+}
+.toast-enter-active {
+  animation: toastIn 0.2s ease;
+}
+.toast-leave-active {
+  animation: toastOut 0.3s ease;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-50%) scale(0.8); }
+  to { opacity: 1; transform: translateY(-50%) scale(1); }
+}
+@keyframes toastOut {
+  from { opacity: 1; transform: translateY(-50%) scale(1); }
+  to { opacity: 0; transform: translateY(-50%) scale(0.8); }
 }
 </style>
