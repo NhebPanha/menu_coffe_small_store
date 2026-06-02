@@ -1,21 +1,30 @@
 <template>
-  <div class="menu-row" :class="{ 'no-border': isLast }">
-    <img v-if="item.image" :src="item.image" :alt="item.en" class="row-image" />
-    <div class="row-info">
-      <div class="row-name">{{ item.en }}</div>
-      <div class="row-khmer">{{ item.kh }}</div>
-      <div class="row-chinese">{{ item.zh }}</div>
-      <div class="row-price">${{ item.price.toFixed(2) }}</div>
+  <div class="menu-card" @click="handleAdd">
+    <div class="card-image-wrapper">
+      <img v-if="item.image" :src="item.image" :alt="item.en" class="card-image" />
+      <Transition name="fade">
+        <div class="added-overlay" v-if="showToast">
+          <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+      </Transition>
     </div>
-    <button class="add-btn" @click="handleAdd">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-      </svg>
-    </button>
-    <!-- Toast feedback -->
-    <Transition name="toast">
-      <div class="added-toast" v-if="showToast">Added ✓</div>
-    </Transition>
+    
+    <div class="card-info">
+      <div class="card-name">{{ item.en }}</div>
+      <div class="card-khmer">{{ item.kh }}</div>
+      <div class="card-chinese" v-if="item.zh">{{ item.zh }}</div>
+      
+      <div class="card-footer">
+        <div class="card-price">${{ item.price.toFixed(2) }}</div>
+        <button class="add-btn" @click.stop="handleAdd">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -26,10 +35,6 @@ const props = defineProps({
   item: {
     type: Object,
     required: true
-  },
-  isLast: {
-    type: Boolean,
-    default: false
   }
 })
 const { addToCart } = useCart()
@@ -43,100 +48,128 @@ const handleAdd = () => {
 </script>
 
 <style scoped>
-.menu-row {
+.menu-card {
+  background: var(--ios-card, #ffffff);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 0 0.5px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.menu-card:active {
+  transform: scale(0.96);
+  box-shadow: 0 0 0 0.5px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.02);
+}
+.card-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f2f2f7;
+}
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.menu-card:hover .card-image {
+  transform: scale(1.04);
+}
+.added-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(48, 209, 88, 0.88);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   display: flex;
   align-items: center;
-  padding: 10px 16px;
-  gap: 12px;
-  border-bottom: 0.5px solid rgba(60, 60, 67, 0.12);
-  position: relative;
-  transition: background 0.15s;
+  justify-content: center;
+  color: white;
+  z-index: 2;
 }
-.menu-row:active {
-  background: rgba(0,0,0,0.02);
+.check-icon {
+  animation: checkPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.menu-row.no-border {
-  border-bottom: none;
+@keyframes checkPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
-.row-image {
-  width: 56px;
-  height: 56px;
-  border-radius: 10px;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-.row-info {
+.card-info {
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
   flex: 1;
-  min-width: 0;
 }
-.row-name {
-  font-size: 16px;
-  font-weight: 500;
-  color: #000;
-  letter-spacing: -0.3px;
-}
-.row-khmer {
+.card-name {
   font-size: 14px;
-  color: #3c3c43;
-  margin-top: 1px;
-  opacity: 0.7;
-}
-.row-chinese {
-  font-size: 12px;
-  color: #8e8e93;
-  margin-top: 1px;
-}
-.row-price {
-  font-size: 15px;
   font-weight: 600;
-  color: #007aff;
-  margin-top: 3px;
+  color: #000;
+  letter-spacing: -0.2px;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 35px;
+  margin-bottom: 2px;
+}
+.card-khmer {
+  font-size: 12px;
+  color: var(--ios-secondary, #3c3c43);
+  opacity: 0.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 1px;
+}
+.card-chinese {
+  font-size: 11px;
+  color: var(--ios-tertiary, #8e8e93);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 8px;
+}
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+.card-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ios-blue, #007aff);
 }
 .add-btn {
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   border: none;
   background: rgba(0, 122, 255, 0.1);
-  color: #007aff;
+  color: var(--ios-blue, #007aff);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
   transition: background 0.15s, transform 0.1s;
 }
 .add-btn:active {
   background: rgba(0, 122, 255, 0.2);
-  transform: scale(0.92);
+  transform: scale(0.9);
 }
-
-/* Toast animation */
-.added-toast {
-  position: absolute;
-  top: 50%;
-  right: 60px;
-  transform: translateY(-50%);
-  background: #30d158;
-  color: white;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 12px;
-  pointer-events: none;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s ease;
 }
-.toast-enter-active {
-  animation: toastIn 0.2s ease;
-}
-.toast-leave-active {
-  animation: toastOut 0.3s ease;
-}
-@keyframes toastIn {
-  from { opacity: 0; transform: translateY(-50%) scale(0.8); }
-  to { opacity: 1; transform: translateY(-50%) scale(1); }
-}
-@keyframes toastOut {
-  from { opacity: 1; transform: translateY(-50%) scale(1); }
-  to { opacity: 0; transform: translateY(-50%) scale(0.8); }
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>

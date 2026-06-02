@@ -1,12 +1,11 @@
 <template>
   <section class="category-section">
     <h2 class="section-header">{{ category.category }}</h2>
-    <div class="ios-card">
+    <div class="ios-grid-container">
       <MenuItem 
-        v-for="(item, index) in category.items" 
+        v-for="item in category.items" 
         :key="item.id" 
         :item="item"
-        :is-last="index === category.items.length - 1"
       />
     </div>
   </section>
@@ -31,12 +30,17 @@ const props = defineProps({
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #6c6c70;
-  margin: 0 0 8px 20px;
+  margin: 0 0 8px 4px;
 }
-.ios-card {
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 0 0 0.5px rgba(0,0,0,0.04);
+.ios-grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+@media (min-width: 520px) {
+  .ios-grid-container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
 }
 </style>
