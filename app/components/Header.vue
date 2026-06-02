@@ -35,34 +35,6 @@
       <!-- Right Side Buttons -->
       <div class="nav-actions">
 
-        <!-- Notifications -->
-        <button
-          class="nav-btn notification-btn"
-          @click="$emit('toggle-notifications')"
-          title="Notifications"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
-            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-          </svg>
-
-          <span
-            class="notification-badge"
-            v-if="notificationCount > 0"
-          >
-            {{ notificationCount }}
-          </span>
-        </button>
 
         <!-- Cart -->
         <button
@@ -215,7 +187,7 @@ const notificationCount = ref(3)
 }
 
 .qr-btn {
-  color: #34c759;
+  color: #007aff;
 }
 
 @media (max-width: 480px) {
