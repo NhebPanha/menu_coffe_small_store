@@ -70,7 +70,7 @@ const handleCheckout = () => {
 
 const handleTelegramCheckout = () => {
   // Replace with actual shop username
-  const username = "shop_username"; 
+  const username = "nhebpanhabot"; 
   const message = generateOrderMessage();
   window.open(`https://t.me/${username}?text=${message}`, '_blank');
 }
