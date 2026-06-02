@@ -8,6 +8,7 @@
     
     <div class="cart-items" v-if="cart.length > 0">
       <div v-for="item in cart" :key="item.id" class="cart-item">
+        <img v-if="item.image" :src="item.image" :alt="item.en" class="cart-item-image" />
         <div class="item-details">
           <div class="item-name">{{ item.en }}</div>
           <div class="item-price">${{ (item.price * item.quantity).toFixed(2) }}</div>
@@ -134,6 +135,16 @@ const handleTelegramCheckout = () => {
   padding-bottom: 1rem;
   margin-bottom: 1rem;
   border-bottom: 1px dashed rgba(0,0,0,0.1);
+  gap: 1rem;
+}
+.cart-item-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.item-details {
+  flex: 1;
 }
 .item-name {
   font-weight: 600;
