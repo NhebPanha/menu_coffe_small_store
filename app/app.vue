@@ -1,6 +1,6 @@
 <template>
   <div class="ios-app">
-    <Header @toggle-cart="isCartOpen = true" />
+    <Header @toggle-cart="isCartOpen = true" @toggle-qr="isQrOpen = true" />
     
     <main class="ios-content">
       <!-- Large title -->
@@ -20,14 +20,26 @@
     </main>
     
     <Cart :is-open="isCartOpen" @close="isCartOpen = false" />
+    <QrGenerator :is-open="isQrOpen" @close="isQrOpen = false" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRoute } from '#imports'
 import { menuData } from '~/data/menu'
 
 const isCartOpen = ref(false)
+const isQrOpen = ref(false)
+
+const route = useRoute()
+const { tableNumber } = useCart()
+
+onMounted(() => {
+  if (route.query.table) {
+    tableNumber.value = String(route.query.table)
+  }
+})
 </script>
 
 <style>
