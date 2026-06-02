@@ -3,6 +3,13 @@
     <div class="cart-overlay" v-if="isOpen" @click="$emit('close')"></div>
   </Transition>
   
+  <NotificationDropdown 
+    :isVisible="showNotification"
+    title="Order Sent!"
+    message="Your order has been sent to Telegram"
+    @close="showNotification = false"
+  />
+  
   <div class="cart-panel" :class="{ 'open': isOpen }">
     <div class="cart-header">
       <button class="nav-text-btn clear-all-btn" v-if="cart.length > 0" @click="clearCart">Clear</button>
@@ -114,32 +121,36 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 const { cart, tableNumber, addToCart, removeFromCart, totalPrice, clearCart } = useCart()
 const customerName = ref('')
+const showNotification = ref(false)
 
 const generateOrderMessage = () => {
   const name = customerName.value.trim() || 'Customer'
-  const table = tableNumber.value.trim()
-  
+  const table = tableNumber.value?.trim()
+
   let message = `════════════════════\n`
   message += `🧾 ORDER: ${name}\n`
+
   if (table) {
     message += `🪑 TABLE: ${table}\n`
   }
+
   message += `════════════════════\n\n`
-  
+
   cart.value.forEach((item, index) => {
     message += `🥤 Name : ${item.en} (${item.kh})\n`
     message += `📦 Qty  : ${item.quantity}\n`
     message += `💵 Price: $${(item.price * item.quantity).toFixed(2)}\n`
+
     if (index < cart.value.length - 1) {
       message += `\n────────────────────\n\n`
     }
   })
-  
+
   message += `\n════════════════════\n`
   message += `💰 Total: $${totalPrice.value.toFixed(2)}\n`
   message += `════════════════════`
-  
-  return encodeURIComponent(message)
+
+  return message
 }
 
 const handleCheckout = () => {
@@ -150,12 +161,29 @@ const handleCheckout = () => {
   emit('close')
 }
 
-const handleTelegramCheckout = () => {
-  const username = "jiaowobaobao" 
-  const message = generateOrderMessage()
-  window.open(`https://t.me/${username}?text=${message}`, '_blank')
-  clearCart()
-  emit('close')
+const handleTelegramCheckout = async () => {
+  try {
+    const response = await $fetch('/api/telegram/send-order', {
+      method: 'POST',
+      body: {
+        customerName: customerName.value.trim() || 'Guest',
+        tableNumber: tableNumber.value?.trim(),
+        items: cart.value,
+        totalPrice: totalPrice.value
+      }
+    })
+    
+    if (response.success) {
+      showNotification.value = true
+      clearCart()
+      emit('close')
+    } else {
+      alert('❌ Error: ' + (response.error || 'Failed to send order'))
+    }
+  } catch (error) {
+    console.error('Telegram checkout error:', error)
+    alert('❌ Connection error. Please try again.')
+  }
 }
 </script>
 
