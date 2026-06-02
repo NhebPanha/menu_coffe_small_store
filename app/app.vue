@@ -1,14 +1,16 @@
 <template>
-  <div class="app-container">
+  <div class="ios-app">
     <Header @toggle-cart="isCartOpen = true" />
     
-    <main class="main-content">
-      <div class="hero">
-        <h2>Welcome to Stardust Cafe</h2>
-        <p>Discover our carefully crafted beverages.</p>
+    <main class="ios-content">
+      <!-- Large title -->
+      <div class="large-title-section">
+        <h1 class="large-title">Menu</h1>
+        <p class="large-subtitle">Stardust Cafe · Order & Enjoy</p>
       </div>
       
-      <div class="menu-container">
+      <!-- Menu categories -->
+      <div class="menu-list">
         <CategorySection 
           v-for="category in menuData" 
           :key="category.category" 
@@ -29,60 +31,76 @@ const isCartOpen = ref(false)
 </script>
 
 <style>
-/* Global Styles */
+/* ── iOS Global Reset ── */
 :root {
-  --primary-color: #c48b5d;
-  --primary-hover: #a9754b;
-  --accent-color: #ff4757;
-  --bg-color: #fcfbf9;
-  --text-dark: #2d3436;
-  --text-muted: #636e72;
+  --ios-blue: #007aff;
+  --ios-green: #30d158;
+  --ios-red: #ff3b30;
+  --ios-bg: #f2f2f7;
+  --ios-card: #ffffff;
+  --ios-separator: rgba(60, 60, 67, 0.12);
+  --ios-label: #000000;
+  --ios-secondary: #3c3c43;
+  --ios-tertiary: #8e8e93;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-dark);
-  line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--ios-bg);
+  color: var(--ios-label);
+  line-height: 1.47;
+  letter-spacing: -0.2px;
 }
 
-.app-container {
+/* ── App Container ── */
+.ios-app {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
 
-.main-content {
+/* ── Content ── */
+.ios-content {
   flex: 1;
-  max-width: 1200px;
+  max-width: 700px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 0 0 40px 0;
   width: 100%;
 }
 
-.hero {
-  text-align: center;
-  margin-bottom: 3rem;
-  padding: 3rem 1rem;
-  background: linear-gradient(135deg, rgba(196,139,93,0.1) 0%, rgba(196,139,93,0.05) 100%);
-  border-radius: 24px;
+/* ── Large Title (iOS style) ── */
+.large-title-section {
+  padding: 8px 20px 16px;
+}
+.large-title {
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: 0.37px;
+  color: #000;
+  margin: 0;
+}
+.large-subtitle {
+  font-size: 15px;
+  color: var(--ios-tertiary);
+  margin: 2px 0 0 0;
+  letter-spacing: -0.24px;
 }
 
-.hero h2 {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-  color: var(--primary-color);
-}
-
-.hero p {
-  font-size: 1.1rem;
-  color: var(--text-muted);
+/* ── Menu List ── */
+.menu-list {
+  padding: 0 16px;
 }
 </style>
