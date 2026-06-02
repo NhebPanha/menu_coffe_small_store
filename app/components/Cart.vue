@@ -50,7 +50,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close'])
-const { cart, addToCart, removeFromCart, totalPrice } = useCart()
+const { cart, addToCart, removeFromCart, totalPrice, clearCart } = useCart()
 
 const generateOrderMessage = () => {
   let message = "Hello! I would like to place an order:\n\n";
@@ -66,13 +66,17 @@ const handleCheckout = () => {
   const phoneNumber = "1234567890"; 
   const message = generateOrderMessage();
   window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+  clearCart();
+  emit('close');
 }
 
 const handleTelegramCheckout = () => {
   // Replace with actual shop username
-  const username = "nhebpanhabot"; 
+  const username = "jiaowobaobao"; 
   const message = generateOrderMessage();
   window.open(`https://t.me/${username}?text=${message}`, '_blank');
+  clearCart();
+  emit('close');
 }
 </script>
 
