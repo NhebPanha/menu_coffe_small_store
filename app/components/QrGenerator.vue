@@ -80,18 +80,12 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 
 const tableVal = ref('')
-const baseUrl = ref('')
+const baseUrl = 'https://stardustcafe.vercel.app/menu_coffe_small_store/'
 const copyStatus = ref('🔗 Copy Table Link')
 
-onMounted(() => {
-  // Extract base URL dynamically
-  baseUrl.value = window.location.origin + window.location.pathname
-})
-
 const fullUrl = computed(() => {
-  if (!baseUrl.value) return ''
   const table = tableVal.value.trim()
-  return table ? `${baseUrl.value}?table=${encodeURIComponent(table)}` : baseUrl.value
+  return table ? `${baseUrl}?table=${encodeURIComponent(table)}` : baseUrl
 })
 
 const qrImageUrl = computed(() => {
