@@ -11,6 +11,7 @@ export interface CartItem {
 
 export const useCart = () => {
   const cart = useState<CartItem[]>('cart', () => [])
+  const tableNumber = useState<string>('tableNumber', () => '')
   
   const addToCart = (item: any) => {
     const existing = cart.value.find(i => i.id === item.id)
@@ -41,6 +42,7 @@ export const useCart = () => {
 
   return {
     cart,
+    tableNumber,
     addToCart,
     removeFromCart,
     clearCart,
@@ -48,3 +50,4 @@ export const useCart = () => {
     totalPrice
   }
 }
+

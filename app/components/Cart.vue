@@ -57,6 +57,15 @@
               placeholder="Your Name / ឈ្មោះ" 
             />
           </div>
+          <div class="input-row">
+            <span class="input-icon">🪑</span>
+            <input 
+              v-model="tableNumber" 
+              type="text" 
+              class="customer-name-input" 
+              placeholder="Table Number / លេខតុ (Optional)" 
+            />
+          </div>
         </div>
       </div>
       
@@ -103,13 +112,18 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close'])
-const { cart, addToCart, removeFromCart, totalPrice, clearCart } = useCart()
+const { cart, tableNumber, addToCart, removeFromCart, totalPrice, clearCart } = useCart()
 const customerName = ref('')
 
 const generateOrderMessage = () => {
   const name = customerName.value.trim() || 'Customer'
+  const table = tableNumber.value.trim()
+  
   let message = `════════════════════\n`
   message += `🧾 ORDER: ${name}\n`
+  if (table) {
+    message += `🪑 TABLE: ${table}\n`
+  }
   message += `════════════════════\n\n`
   
   cart.value.forEach((item, index) => {
