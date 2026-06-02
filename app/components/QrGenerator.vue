@@ -68,7 +68,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 
 const props = defineProps({
   isOpen: {
@@ -80,16 +80,10 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 
 const tableVal = ref('')
-const baseUrl = ref('')
+const baseUrl = ref('https://stardustcafe.vercel.app/menu_coffe_small_store/')
 const copyStatus = ref('🔗 Copy Table Link')
 
-onMounted(() => {
-  // Extract base URL dynamically
-  baseUrl.value = window.location.origin + window.location.pathname
-})
-
 const fullUrl = computed(() => {
-  if (!baseUrl.value) return ''
   const table = tableVal.value.trim()
   return table ? `${baseUrl.value}?table=${encodeURIComponent(table)}` : baseUrl.value
 })
