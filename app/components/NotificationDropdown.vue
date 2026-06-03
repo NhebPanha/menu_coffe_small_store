@@ -20,10 +20,6 @@
             <line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
         </div>
-
-
-
-        
       </div>
       <div class="notification-progress">
         <div class="progress-bar" :style="{ animation: `progress ${duration}ms linear forwards` }"></div>
