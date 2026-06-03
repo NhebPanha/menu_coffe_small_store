@@ -28,7 +28,6 @@
 
       <!-- Cafe Title -->
       <div class="nav-title">
-        <span class="nav-logo">✦</span>
         <h1>Stardust Cafe</h1>
       </div>
 
@@ -81,7 +80,7 @@ const notificationCount = ref(3)
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&display=swap');
 
 .ios-nav {
   position: sticky;
@@ -114,17 +113,12 @@ const notificationCount = ref(3)
   white-space: nowrap;
 }
 
-.nav-logo {
-  font-size: 22px;
-  color: #d4a017;
-}
-
 .nav-title h1 {
   margin: 0;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 24px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 22px;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   color: #1d1d1f;
 }
 
