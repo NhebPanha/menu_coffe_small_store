@@ -197,7 +197,7 @@ const handlePrint = () => {
       <body>
         <div class="card">
           <div class="cafe-logo">☕</div>
-          <h1 class="cafe-name">Stardust Cafe</h1>
+          <h1 class="cafe-name">stardustcafebotust Cafe</h1>
           <p class="tagline">Scan to View Menu & Order</p>
           <div class="qr-container">
             <img class="qr-img" src="${qrUrl}" alt="QR Code" />
