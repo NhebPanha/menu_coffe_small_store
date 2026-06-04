@@ -1,6 +1,6 @@
 <template>
   <section class="category-section">
-    <h2 class="section-header">{{ category.category }}</h2>
+    <h2 class="section-header">{{ tCategory(category.category) }}</h2>
     <div class="ios-grid-container">
       <MenuItem 
         v-for="item in category.items" 
@@ -18,6 +18,7 @@ const props = defineProps({
     required: true
   }
 })
+const { tCategory } = useLang()
 </script>
 
 <style scoped>
@@ -29,7 +30,7 @@ const props = defineProps({
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #6c6c70;
+  color: var(--ios-tertiary, #6c6c70);
   margin: 0 0 8px 4px;
 }
 .ios-grid-container {

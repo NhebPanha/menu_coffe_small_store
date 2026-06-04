@@ -70,7 +70,7 @@ const handleAdd = () => {
   width: 100%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: #f2f2f7;
+  background: var(--ios-image-bg, #f2f2f7);
 }
 .card-image {
   width: 100%;
@@ -112,7 +112,7 @@ const handleAdd = () => {
 .card-name {
   font-size: 14px;
   font-weight: 600;
-  color: #000;
+  color: var(--ios-label, #000);
   letter-spacing: -0.2px;
   line-height: 1.25;
   display: -webkit-box;

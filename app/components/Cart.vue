@@ -12,17 +12,17 @@
   
   <div class="cart-panel" :class="{ 'open': isOpen }">
     <div class="cart-header">
-      <button class="nav-text-btn clear-all-btn" v-if="cart.length > 0" @click="clearCart">Clear</button>
+      <button class="nav-text-btn clear-all-btn" v-if="cart.length > 0" @click="clearCart">{{ t('clear') }}</button>
       <div class="nav-btn-placeholder" v-else></div>
-      
-      <h2 class="nav-title">Your Order</h2>
-      
-      <button class="nav-text-btn close-btn" @click="$emit('close')">Done</button>
+
+      <h2 class="nav-title">{{ t('yourOrder') }}</h2>
+
+      <button class="nav-text-btn close-btn" @click="$emit('close')">{{ t('done') }}</button>
     </div>
     
     <div class="cart-content">
       <div class="cart-scroll-area" v-if="cart.length > 0">
-        <div class="ios-section-header">Your Items</div>
+        <div class="ios-section-header">{{ t('yourItems') }}</div>
         <div class="ios-grouped-card">
           <div v-for="(item, index) in cart" :key="item.id" class="cart-row" :class="{ 'no-border': index === cart.length - 1 }">
             <img v-if="item.image" :src="resolveImageUrl(item.image)" :alt="item.en" class="row-image" />
@@ -42,11 +42,11 @@
                   :class="{ active: item.toppings?.[key] }"
                   @click="toggleTopping(item.id, key)"
                 >
-                  {{ item.toppings?.[key] ? '✓' : '+' }} {{ label }} ${{ TOPPING_PRICE.toFixed(2) }}
+                  {{ item.toppings?.[key] ? '✓' : '+' }} {{ t(key) }} ${{ TOPPING_PRICE.toFixed(2) }}
                 </button>
               </div>
               <div class="row-sugar">
-                <span class="sugar-label">🍬 Sugar</span>
+                <span class="sugar-label">🍬 {{ t('sugar') }}</span>
                 <button
                   v-for="level in SUGAR_LEVELS"
                   :key="level"
@@ -76,24 +76,24 @@
           </div>
         </div>
         
-        <div class="ios-section-header">Customer Details</div>
+        <div class="ios-section-header">{{ t('customerDetails') }}</div>
         <div class="ios-grouped-card">
           <div class="input-row">
             <span class="input-icon">👤</span>
-            <input 
-              v-model="customerName" 
-              type="text" 
-              class="customer-name-input" 
-              placeholder="Your Name / ឈ្មោះ" 
+            <input
+              v-model="customerName"
+              type="text"
+              class="customer-name-input"
+              :placeholder="t('namePlaceholder')"
             />
           </div>
           <div class="input-row">
             <span class="input-icon">🪑</span>
-            <input 
-              v-model="tableNumber" 
-              type="text" 
-              class="customer-name-input" 
-              placeholder="Table Number / លេខតុ (Optional)" 
+            <input
+              v-model="tableNumber"
+              type="text"
+              class="customer-name-input"
+              :placeholder="t('tablePlaceholder')"
             />
           </div>
         </div>
@@ -101,14 +101,14 @@
       
       <div class="empty-cart" v-else>
         <div class="empty-illustration">🥤</div>
-        <h3 class="empty-title">Your Cart is Empty</h3>
-        <p class="empty-subtitle">Drinks you add will show up here.</p>
+        <h3 class="empty-title">{{ t('emptyTitle') }}</h3>
+        <p class="empty-subtitle">{{ t('emptySubtitle') }}</p>
       </div>
     </div>
 
     <div class="cart-footer" v-if="cart.length > 0">
       <div class="total-row">
-        <span class="total-label">Total</span>
+        <span class="total-label">{{ t('total') }}</span>
         <span class="total-price">${{ totalPrice.toFixed(2) }}</span>
       </div>
       
@@ -117,14 +117,14 @@
           <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
             <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.197 1.451 4.793 1.451 5.485 0 9.948-4.469 9.952-9.96.002-2.66-1.023-5.158-2.887-7.027A9.857 9.857 0 0 0 11.999 1.45c-5.49 0-9.953 4.471-9.957 9.963 0 1.9.497 3.753 1.442 5.358l-.995 3.633 3.558-.934zM18.23 15.22c-.34-.17-2.012-.993-2.321-1.105-.31-.113-.536-.17-.76.17-.225.34-.87 1.102-1.066 1.328-.197.226-.394.254-.734.084-.34-.17-1.437-.53-2.738-1.691-1.012-.903-1.696-2.02-1.894-2.36-.197-.34-.02-.524.15-.694.153-.153.34-.396.51-.594.17-.198.226-.34.34-.565.113-.226.056-.424-.028-.593-.085-.17-.76-1.834-1.042-2.513-.275-.662-.555-.572-.76-.583-.197-.01-.423-.01-.648-.01-.225 0-.592.085-.902.424-.31.34-1.183 1.158-1.183 2.825 0 1.667 1.212 3.277 1.382 3.503.17.226 2.385 3.642 5.776 5.102.806.347 1.436.554 1.928.71.81.258 1.547.222 2.13.135.65-.098 2.013-.82 2.295-1.58.28-.762.28-1.413.197-1.55-.084-.136-.31-.22-.65-.39z"/>
           </svg>
-          Order via WhatsApp
+          {{ t('orderWhatsapp') }}
         </button>
         
         <button class="ios-btn tg-btn" @click="handleTelegramCheckout">
           <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
             <path d="M11.944 0C5.357 0 0 5.357 0 12s5.357 12 12 12 12-5.357 12-12S18.527 0 11.944 0zm5.636 8.324l-1.922 9.062c-.143.64-.523.796-1.057.496l-2.929-2.158-1.413 1.36c-.156.156-.287.287-.588.287l.21-2.98 5.426-4.9c.235-.21-.051-.326-.366-.117L9.22 13.916l-2.89-.903c-.628-.196-.64-.628.13-.928l11.295-4.354c.523-.19.98.12.825.593z"/>
           </svg>
-          Order via Telegram
+          {{ t('orderTelegram') }}
         </button>
       </div>
     </div>
@@ -143,6 +143,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 const { cart, tableNumber, addToCart, removeFromCart, toggleTopping, setSugar, totalPrice, clearCart } = useCart()
+const { t } = useLang()
 const { resolveImageUrl } = useImageUrl()
 const customerName = ref('')
 const showNotification = ref(false)
@@ -259,7 +260,7 @@ const handleTelegramCheckout = async () => {
 
 .cart-header {
   height: 52px;
-  background: rgba(249, 249, 249, 0.85);
+  background: var(--ios-nav-bg, rgba(249, 249, 249, 0.85));
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 0.5px solid var(--ios-separator, rgba(60, 60, 67, 0.12));
@@ -278,7 +279,7 @@ const handleTelegramCheckout = async () => {
   font-size: 17px;
   font-weight: 600;
   letter-spacing: -0.4px;
-  color: #000;
+  color: var(--ios-label, #000);
   pointer-events: none;
   white-space: nowrap;
 }
@@ -372,7 +373,7 @@ const handleTelegramCheckout = async () => {
 .row-name {
   font-size: 15px;
   font-weight: 600;
-  color: #000;
+  color: var(--ios-label, #000);
   letter-spacing: -0.2px;
   white-space: nowrap;
   overflow: hidden;
@@ -510,7 +511,7 @@ const handleTelegramCheckout = async () => {
   font-weight: 600;
   min-width: 24px;
   text-align: center;
-  color: #000;
+  color: var(--ios-label, #000);
   user-select: none;
 }
 
@@ -532,7 +533,7 @@ const handleTelegramCheckout = async () => {
   background: transparent;
   font-family: inherit;
   font-size: 16px;
-  color: #000;
+  color: var(--ios-label, #000);
   outline: none;
   padding: 4px 0;
 }
@@ -566,7 +567,7 @@ const handleTelegramCheckout = async () => {
 .empty-title {
   font-size: 18px;
   font-weight: 600;
-  color: #000;
+  color: var(--ios-label, #000);
   margin-bottom: 6px;
 }
 
@@ -578,7 +579,7 @@ const handleTelegramCheckout = async () => {
 
 .cart-footer {
   padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 12px));
-  background: rgba(249, 249, 249, 0.85);
+  background: var(--ios-nav-bg, rgba(249, 249, 249, 0.85));
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-top: 0.5px solid var(--ios-separator, rgba(60, 60, 67, 0.12));
@@ -596,13 +597,13 @@ const handleTelegramCheckout = async () => {
 .total-label {
   font-size: 17px;
   font-weight: 500;
-  color: #000;
+  color: var(--ios-label, #000);
 }
 
 .total-price {
   font-size: 22px;
   font-weight: 700;
-  color: #000;
+  color: var(--ios-label, #000);
   letter-spacing: -0.4px;
 }
 

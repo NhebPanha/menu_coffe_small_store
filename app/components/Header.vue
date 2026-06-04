@@ -34,6 +34,32 @@
       <!-- Right Side Buttons -->
       <div class="nav-actions">
 
+        <!-- Dark mode toggle -->
+        <button
+          class="nav-btn theme-btn"
+          @click="toggleTheme"
+          :title="theme === 'dark' ? 'Light mode' : 'Dark mode'"
+        >
+          <svg v-if="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+
+        <!-- Language toggle -->
+        <button
+          class="nav-btn lang-btn"
+          @click="toggleLang"
+          :title="lang === 'en' ? 'ប្ដូរទៅភាសាខ្មែរ' : 'Switch to English'"
+        >
+          {{ lang === 'en' ? 'ខ្មែរ' : 'EN' }}
+        </button>
 
         <!-- Cart -->
         <button
@@ -74,9 +100,8 @@
 
 <script setup>
 const { totalItems } = useCart()
-
-// Demo notification count
-const notificationCount = ref(3)
+const { lang, toggleLang } = useLang()
+const { theme, toggleTheme } = useTheme()
 </script>
 
 <style scoped>
@@ -86,10 +111,10 @@ const notificationCount = ref(3)
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(249, 249, 249, 0.88);
+  background: var(--ios-nav-bg, rgba(249, 249, 249, 0.88));
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 0.5px solid rgba(60, 60, 67, 0.12);
+  border-bottom: 0.5px solid var(--ios-separator, rgba(60, 60, 67, 0.12));
 }
 
 .nav-content {
@@ -119,7 +144,7 @@ const notificationCount = ref(3)
   font-size: 22px;
   font-weight: 700;
   letter-spacing: 0.5px;
-  color: #1d1d1f;
+  color: var(--ios-label, #1d1d1f);
 }
 
 .nav-actions {
@@ -141,6 +166,17 @@ const notificationCount = ref(3)
   align-items: center;
   justify-content: center;
   transition: all 0.15s ease;
+}
+
+.lang-btn {
+  width: auto;
+  min-width: 42px;
+  padding: 0 10px;
+  border-radius: 16px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
 }
 
 .nav-btn:hover {
