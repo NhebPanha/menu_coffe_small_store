@@ -25,7 +25,7 @@
         <div class="ios-section-header">Your Items</div>
         <div class="ios-grouped-card">
           <div v-for="(item, index) in cart" :key="item.id" class="cart-row" :class="{ 'no-border': index === cart.length - 1 }">
-            <img v-if="item.image" :src="item.image" :alt="item.en" class="row-image" />
+            <img v-if="item.image" :src="resolveImageUrl(item.image)" :alt="item.en" class="row-image" />
             <div class="row-details">
               <div class="row-name">{{ item.en }}</div>
               <div class="row-secondary-langs">
@@ -120,6 +120,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 const { cart, tableNumber, addToCart, removeFromCart, totalPrice, clearCart } = useCart()
+const { resolveImageUrl } = useImageUrl()
 const customerName = ref('')
 const showNotification = ref(false)
 

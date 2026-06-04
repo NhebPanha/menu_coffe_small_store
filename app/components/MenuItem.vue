@@ -1,7 +1,7 @@
 <template>
   <div class="menu-card" @click="handleAdd">
     <div class="card-image-wrapper">
-      <img v-if="item.image" :src="item.image" :alt="item.en" class="card-image" />
+      <img v-if="item.image" :src="resolveImageUrl(item.image)" :alt="item.en" class="card-image" />
       <Transition name="fade">
         <div class="added-overlay" v-if="showToast">
           <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -38,6 +38,7 @@ const props = defineProps({
   }
 })
 const { addToCart } = useCart()
+const { resolveImageUrl } = useImageUrl()
 const showToast = ref(false)
 
 const handleAdd = () => {
