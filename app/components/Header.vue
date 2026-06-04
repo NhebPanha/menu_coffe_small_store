@@ -28,7 +28,20 @@
 
       <!-- Cafe Title -->
       <div class="nav-title">
-        <h1>Stardust Cafe</h1>
+        <NuxtLink to="/" class="brand-link" aria-label="Stardust Cafe — Home">
+          <svg class="brand-logo" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path
+              class="brand-stroke"
+              d="M52,156 L52,120 C52,98 64,90 84,92 C104,94 108,124 120,142 C128,154 137,154 147,140 C156,127 160,106 178,106 C197,106 199,138 182,152 C172,160 159,158 152,145"
+              fill="none"
+              stroke-width="44"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <circle class="brand-dot" cx="190" cy="74" r="22" />
+          </svg>
+          <h1>Stardust Cafe</h1>
+        </NuxtLink>
       </div>
 
       <!-- Right Side Buttons -->
@@ -138,6 +151,35 @@ const { theme, toggleTheme } = useTheme()
   padding: 0 8px;
 }
 
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+  pointer-events: auto;
+  transition: opacity 0.15s ease;
+}
+
+.brand-link:active {
+  opacity: 0.5;
+}
+
+.brand-logo {
+  height: 30px;
+  width: 30px;
+  flex-shrink: 0;
+}
+
+.brand-stroke {
+  stroke: var(--ios-label, #111);
+}
+
+.brand-dot {
+  fill: #f15a16;
+}
+
 .nav-title h1 {
   margin: 0;
   font-family: 'Quicksand', sans-serif;
@@ -238,6 +280,11 @@ const { theme, toggleTheme } = useTheme()
     font-size: 19px;
   }
 
+  .brand-logo {
+    height: 26px;
+    width: 26px;
+  }
+
   .nav-btn {
     width: 38px;
     height: 38px;
@@ -253,6 +300,11 @@ const { theme, toggleTheme } = useTheme()
 @media (max-width: 360px) {
   .nav-title h1 {
     font-size: 17px;
+  }
+
+  .brand-logo {
+    height: 22px;
+    width: 22px;
   }
 
   .nav-btn {
