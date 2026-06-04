@@ -128,14 +128,14 @@ const { theme, toggleTheme } = useTheme()
 }
 
 .nav-title {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   pointer-events: none;
-  white-space: nowrap;
+  padding: 0 8px;
 }
 
 .nav-title h1 {
@@ -145,12 +145,21 @@ const { theme, toggleTheme } = useTheme()
   font-weight: 700;
   letter-spacing: 0.5px;
   color: var(--ios-label, #1d1d1f);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .nav-actions {
   display: flex;
   align-items: center;
   gap: 2px;
+  flex-shrink: 0;
+}
+
+.qr-btn {
+  flex-shrink: 0;
 }
 
 .nav-btn {
@@ -222,20 +231,44 @@ const { theme, toggleTheme } = useTheme()
 
 @media (max-width: 480px) {
   .nav-content {
-    padding: 10px 14px;
+    padding: 10px 8px;
   }
 
   .nav-title h1 {
-    font-size: 20px;
-  }
-
-  .nav-logo {
-    font-size: 18px;
+    font-size: 19px;
   }
 
   .nav-btn {
     width: 38px;
     height: 38px;
+  }
+
+  .lang-btn {
+    min-width: 36px;
+    padding: 0 8px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav-title h1 {
+    font-size: 17px;
+  }
+
+  .nav-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .nav-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .lang-btn {
+    min-width: 32px;
+    padding: 0 6px;
+    font-size: 12px;
   }
 }
 </style>
