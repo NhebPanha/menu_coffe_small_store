@@ -6,9 +6,8 @@ export default defineNuxtConfig({
     baseURL: '/menu_coffe_small_store/',
     head: {
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/menu_coffe_small_store/favicon.svg' },
-        { rel: 'icon', type: 'image/x-icon', href: '/menu_coffe_small_store/favicon.ico' },
-        { rel: 'apple-touch-icon', href: '/menu_coffe_small_store/favicon.svg' }
+        { rel: 'icon', type: 'image/svg+xml', href: '/menu_coffe_small_store/favicon.svg?v=4' },
+        { rel: 'apple-touch-icon', href: '/menu_coffe_small_store/favicon.svg?v=4' }
       ]
     }
   },
