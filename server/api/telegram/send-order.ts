@@ -22,10 +22,19 @@ export default defineEventHandler(async (event) => {
     }
     message += `\n*Items:*\n`
     
+    const TOPPING_PRICE = 0.25
+    const TOPPING_LABELS: Record<string, string> = { cream: 'Cream', pearls: 'Pearls' }
+
     items.forEach((item: any) => {
+      const tops = Object.keys(TOPPING_LABELS).filter(k => item.toppings?.[k])
+      const unit = item.price + tops.length * TOPPING_PRICE
       message += `• ${item.en} (${item.kh})`
       if (item.zh) message += ` [${item.zh}]`
-      message += ` x${item.quantity} = $${(item.price * item.quantity).toFixed(2)}\n`
+      message += ` x${item.quantity} = $${(unit * item.quantity).toFixed(2)}\n`
+      message += `   🍬 Sugar ${item.sugar ?? 100}%\n`
+      if (tops.length) {
+        message += `   ➕ ${tops.map(k => TOPPING_LABELS[k]).join(', ')}\n`
+      }
     })
     
     message += `\n════════════════════\n`

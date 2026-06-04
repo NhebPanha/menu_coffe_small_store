@@ -33,7 +33,30 @@
                 <span v-if="item.zh" class="zh-divider">·</span>
                 <span v-if="item.zh" class="row-zh">{{ item.zh }}</span>
               </div>
-              <div class="row-price">${{ (item.price * item.quantity).toFixed(2) }}</div>
+              <div class="row-price">${{ lineTotal(item).toFixed(2) }}</div>
+              <div class="row-toppings">
+                <button
+                  v-for="(label, key) in TOPPING_LABELS"
+                  :key="key"
+                  class="topping-chip"
+                  :class="{ active: item.toppings?.[key] }"
+                  @click="toggleTopping(item.id, key)"
+                >
+                  {{ item.toppings?.[key] ? '✓' : '+' }} {{ label }} ${{ TOPPING_PRICE.toFixed(2) }}
+                </button>
+              </div>
+              <div class="row-sugar">
+                <span class="sugar-label">🍬 Sugar</span>
+                <button
+                  v-for="level in SUGAR_LEVELS"
+                  :key="level"
+                  class="sugar-chip"
+                  :class="{ active: (item.sugar ?? 100) === level }"
+                  @click="setSugar(item.id, level)"
+                >
+                  {{ level }}%
+                </button>
+              </div>
             </div>
             <div class="row-actions">
               <div class="ios-stepper">
@@ -119,7 +142,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close'])
-const { cart, tableNumber, addToCart, removeFromCart, totalPrice, clearCart } = useCart()
+const { cart, tableNumber, addToCart, removeFromCart, toggleTopping, setSugar, totalPrice, clearCart } = useCart()
 const { resolveImageUrl } = useImageUrl()
 const customerName = ref('')
 const showNotification = ref(false)
@@ -139,8 +162,13 @@ const generateOrderMessage = () => {
 
   cart.value.forEach((item, index) => {
     message += `🥤 Name : ${item.en} (${item.kh})\n`
+    const tops = activeToppings(item).map(k => TOPPING_LABELS[k])
+    if (tops.length) {
+      message += `➕ Add  : ${tops.join(', ')}\n`
+    }
+    message += `🍬 Sugar: ${item.sugar ?? 100}%\n`
     message += `📦 Qty  : ${item.quantity}\n`
-    message += `💵 Price: $${(item.price * item.quantity).toFixed(2)}\n`
+    message += `💵 Price: $${lineTotal(item).toFixed(2)}\n`
 
     if (index < cart.value.length - 1) {
       message += `\n────────────────────\n\n`
@@ -376,6 +404,73 @@ const handleTelegramCheckout = async () => {
   font-weight: 600;
   color: var(--ios-blue, #007aff);
   margin-top: 3px;
+}
+
+.row-toppings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.topping-chip {
+  background: rgba(120, 120, 128, 0.12);
+  border: none;
+  border-radius: 14px;
+  padding: 4px 10px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ios-secondary, #3c3c43);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.topping-chip:active {
+  transform: scale(0.94);
+}
+
+.topping-chip.active {
+  background: var(--ios-blue, #007aff);
+  color: #fff;
+}
+
+.row-sugar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.sugar-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ios-tertiary, #8e8e93);
+  margin-right: 2px;
+}
+
+.sugar-chip {
+  background: rgba(120, 120, 128, 0.12);
+  border: none;
+  border-radius: 14px;
+  padding: 4px 9px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ios-secondary, #3c3c43);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, transform 0.1s;
+}
+
+.sugar-chip:active {
+  transform: scale(0.94);
+}
+
+.sugar-chip.active {
+  background: var(--ios-pink, #ff2d92);
+  color: #fff;
 }
 
 .row-actions {

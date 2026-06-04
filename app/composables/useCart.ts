@@ -1,5 +1,10 @@
 import { useState } from '#imports'
 
+export interface Toppings {
+  cream: boolean
+  pearls: boolean
+}
+
 export interface CartItem {
   id: string
   kh: string
@@ -7,18 +12,47 @@ export interface CartItem {
   zh: string
   price: number
   quantity: number
+  image?: string
+  toppings: Toppings
+  sugar: number
 }
+
+export const TOPPING_PRICE = 0.25
+
+export const SUGAR_LEVELS = [25, 50, 75, 100]
+export const DEFAULT_SUGAR = 100
+
+export const TOPPING_LABELS: Record<keyof Toppings, string> = {
+  cream: 'Cream',
+  pearls: 'Pearls'
+}
+
+// active topping keys for a cart item
+export const activeToppings = (item: CartItem): (keyof Toppings)[] =>
+  (Object.keys(TOPPING_LABELS) as (keyof Toppings)[]).filter(k => item.toppings?.[k])
+
+// price of a single unit including its toppings
+export const unitPrice = (item: CartItem): number =>
+  item.price + activeToppings(item).length * TOPPING_PRICE
+
+// price of the whole line (unit price × quantity)
+export const lineTotal = (item: CartItem): number => unitPrice(item) * item.quantity
 
 export const useCart = () => {
   const cart = useState<CartItem[]>('cart', () => [])
   const tableNumber = useState<string>('tableNumber', () => '')
-  
+
   const addToCart = (item: any) => {
     const existing = cart.value.find(i => i.id === item.id)
     if (existing) {
       existing.quantity++
     } else {
-      cart.value.push({ ...item, quantity: 1 })
+      cart.value.push({
+        ...item,
+        quantity: 1,
+        toppings: item.toppings ?? { cream: false, pearls: false },
+        sugar: item.sugar ?? DEFAULT_SUGAR
+      })
     }
   }
 
@@ -33,21 +67,34 @@ export const useCart = () => {
     }
   }
 
+  const toggleTopping = (id: string, name: keyof Toppings) => {
+    const item = cart.value.find(i => i.id === id)
+    if (!item) return
+    if (!item.toppings) item.toppings = { cream: false, pearls: false }
+    item.toppings[name] = !item.toppings[name]
+  }
+
+  const setSugar = (id: string, level: number) => {
+    const item = cart.value.find(i => i.id === id)
+    if (item) item.sugar = level
+  }
+
   const clearCart = () => {
     cart.value = []
   }
 
   const totalItems = computed(() => cart.value.reduce((acc, item) => acc + item.quantity, 0))
-  const totalPrice = computed(() => cart.value.reduce((acc, item) => acc + (item.price * item.quantity), 0))
+  const totalPrice = computed(() => cart.value.reduce((acc, item) => acc + lineTotal(item), 0))
 
   return {
     cart,
     tableNumber,
     addToCart,
     removeFromCart,
+    toggleTopping,
+    setSugar,
     clearCart,
     totalItems,
     totalPrice
   }
 }
-
