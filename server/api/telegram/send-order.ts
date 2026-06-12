@@ -17,8 +17,8 @@ const nextInvoiceNo = (dateKey: string) => {
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  const botToken = process.env.TELEGRAM_BOT_TOKEN
-  const chatId = process.env.TELEGRAM_CHAT_ID
+  const botToken = process.env.NUXT_TELEGRAM_BOT_TOKEN
+  const chatId = process.env.NUXT_TELEGRAM_CHAT_ID
 
   if (!botToken || !chatId) {
     return {
@@ -30,6 +30,9 @@ export default defineEventHandler(async (event) => {
   try {
     const { customerName, tableNumber, items } = body
     const now = new Date()
+
+    // Parse chat_id as number if it's numeric, otherwise use as string
+    const parsedChatId = isNaN(Number(chatId)) ? chatId : Number(chatId)
 
     // 04 Jun 2026
     const dateStr = new Intl.DateTimeFormat('en-GB', {
@@ -99,16 +102,19 @@ export default defineEventHandler(async (event) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        chat_id: chatId,
+        chat_id: parsedChatId,
         text: m
       })
     })
 
-    if (!response.ok) {
-      throw new Error(`Telegram API error: ${response.statusText}`)
-    }
-
     const result = await response.json()
+
+    if (!response.ok || !result.ok) {
+      // Telegram returns the real reason in `description` — surface it instead of a vague "Bad Request"
+      throw new Error(
+        `Telegram API error ${result.error_code ?? response.status}: ${result.description ?? response.statusText}`
+      )
+    }
 
     return {
       success: result.ok,
