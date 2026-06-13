@@ -1,18 +1,16 @@
 <template>
   <div class="chat-widget">
     <!-- Floating button -->
-    <button
-      class="chat-fab"
-      :class="{ 'is-open': isOpen }"
-      @click="toggle"
-      :aria-label="t('chatTitle')"
-    >
+    <button class="chat-fab" :class="{ 'is-open': isOpen }" @click="toggle" :aria-label="t('chatTitle')">
       <!-- Chat bubble icon -->
-      <svg v-if="!isOpen" class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+      <svg v-if="!isOpen" class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path
+          d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
       </svg>
       <!-- Close icon -->
-      <svg v-else class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <svg v-else class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+        stroke-linecap="round" stroke-linejoin="round">
         <line x1="18" y1="6" x2="6" y2="18" />
         <line x1="6" y1="6" x2="18" y2="18" />
       </svg>
@@ -24,10 +22,13 @@
         <!-- Header -->
         <div class="chat-header">
           <div class="chat-avatar">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
               <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
-              <line x1="6" y1="1" x2="6" y2="4" /><line x1="10" y1="1" x2="10" y2="4" /><line x1="14" y1="1" x2="14" y2="4" />
+              <line x1="6" y1="1" x2="6" y2="4" />
+              <line x1="10" y1="1" x2="10" y2="4" />
+              <line x1="14" y1="1" x2="14" y2="4" />
             </svg>
           </div>
           <div class="chat-heading">
@@ -35,20 +36,18 @@
             <div class="chat-status"><span class="status-dot"></span>{{ t('chatSubtitle') }}</div>
           </div>
           <button class="chat-close" @click="toggle" :aria-label="t('done')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </div>
 
         <!-- Messages -->
         <div ref="scrollEl" class="chat-messages">
-          <div
-            v-for="(m, i) in messages"
-            :key="i"
-            class="msg-row"
-            :class="m.from === 'user' ? 'from-user' : 'from-bot'"
-          >
+          <div v-for="(m, i) in messages" :key="i" class="msg-row"
+            :class="m.from === 'user' ? 'from-user' : 'from-bot'">
             <div class="bubble">{{ m.text }}</div>
           </div>
 
@@ -61,15 +60,11 @@
 
         <!-- Input -->
         <form class="chat-input" @submit.prevent="send">
-          <input
-            v-model="draft"
-            type="text"
-            :placeholder="t('chatPlaceholder')"
-            autocomplete="off"
-            :disabled="isSending"
-          />
+          <input v-model="draft" type="text" :placeholder="t('chatPlaceholder')" autocomplete="off"
+            :disabled="isSending" />
           <button type="submit" class="send-btn" :disabled="!draft.trim() || isSending" :aria-label="'Send'">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <line x1="22" y1="2" x2="11" y2="13" />
               <polygon points="22 2 15 22 11 13 2 9 22 2" />
             </svg>
@@ -164,10 +159,24 @@ watch(messages, scrollToBottom, { deep: true })
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
   margin-left: auto;
 }
-.chat-fab:hover { transform: scale(1.06); }
-.chat-fab:active { transform: scale(0.94); }
-.chat-fab.is-open { background: var(--ios-tertiary, #8e8e93); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); }
-.fab-icon { width: 26px; height: 26px; }
+
+.chat-fab:hover {
+  transform: scale(1.06);
+}
+
+.chat-fab:active {
+  transform: scale(0.94);
+}
+
+.chat-fab.is-open {
+  background: var(--ios-tertiary, #8e8e93);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.fab-icon {
+  width: 26px;
+  height: 26px;
+}
 
 /* ── Panel ── */
 .chat-panel {
@@ -196,6 +205,7 @@ watch(messages, scrollToBottom, { deep: true })
   background: linear-gradient(135deg, var(--ios-blue, #007aff), #0a84ff);
   color: #fff;
 }
+
 .chat-avatar {
   width: 38px;
   height: 38px;
@@ -206,9 +216,23 @@ watch(messages, scrollToBottom, { deep: true })
   justify-content: center;
   flex-shrink: 0;
 }
-.chat-avatar svg { width: 20px; height: 20px; }
-.chat-heading { flex: 1; min-width: 0; }
-.chat-title { font-size: 16px; font-weight: 700; letter-spacing: 0.2px; }
+
+.chat-avatar svg {
+  width: 20px;
+  height: 20px;
+}
+
+.chat-heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
 .chat-status {
   font-size: 12px;
   opacity: 0.92;
@@ -217,15 +241,19 @@ watch(messages, scrollToBottom, { deep: true })
   gap: 5px;
   margin-top: 1px;
 }
+
 .status-dot {
-  width: 7px; height: 7px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #30d158;
   box-shadow: 0 0 0 2px rgba(48, 209, 88, 0.3);
   flex-shrink: 0;
 }
+
 .chat-close {
-  width: 30px; height: 30px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.18);
@@ -237,8 +265,15 @@ watch(messages, scrollToBottom, { deep: true })
   flex-shrink: 0;
   transition: background 0.15s ease;
 }
-.chat-close:hover { background: rgba(255, 255, 255, 0.3); }
-.chat-close svg { width: 17px; height: 17px; }
+
+.chat-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.chat-close svg {
+  width: 17px;
+  height: 17px;
+}
 
 /* ── Messages ── */
 .chat-messages {
@@ -250,9 +285,18 @@ watch(messages, scrollToBottom, { deep: true })
   gap: 8px;
   background: var(--ios-bg, #f2f2f7);
 }
-.msg-row { display: flex; }
-.from-user { justify-content: flex-end; }
-.from-bot { justify-content: flex-start; }
+
+.msg-row {
+  display: flex;
+}
+
+.from-user {
+  justify-content: flex-end;
+}
+
+.from-bot {
+  justify-content: flex-start;
+}
 
 .bubble {
   max-width: 78%;
@@ -264,11 +308,13 @@ watch(messages, scrollToBottom, { deep: true })
   white-space: pre-wrap;
   animation: bubbleIn 0.25s ease;
 }
+
 .from-user .bubble {
   background: linear-gradient(135deg, var(--ios-blue, #007aff), #0a84ff);
   color: #fff;
   border-bottom-right-radius: 5px;
 }
+
 .from-bot .bubble {
   background: var(--ios-card, #fff);
   color: var(--ios-label, #000);
@@ -277,23 +323,54 @@ watch(messages, scrollToBottom, { deep: true })
 }
 
 @keyframes bubbleIn {
-  from { opacity: 0; transform: translateY(6px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Typing indicator */
-.typing { display: flex; gap: 4px; align-items: center; padding: 12px 14px; }
+.typing {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 12px 14px;
+}
+
 .typing span {
-  width: 7px; height: 7px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--ios-tertiary, #8e8e93);
   animation: typingBounce 1.2s infinite ease-in-out;
 }
-.typing span:nth-child(2) { animation-delay: 0.15s; }
-.typing span:nth-child(3) { animation-delay: 0.3s; }
+
+.typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
 @keyframes typingBounce {
-  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-  30%           { transform: translateY(-4px); opacity: 1; }
+
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
 }
 
 /* ── Input ── */
@@ -305,6 +382,7 @@ watch(messages, scrollToBottom, { deep: true })
   background: var(--ios-card, #fff);
   border-top: 0.5px solid var(--ios-separator, rgba(60, 60, 67, 0.12));
 }
+
 .chat-input input {
   flex: 1;
   border: none;
@@ -316,9 +394,14 @@ watch(messages, scrollToBottom, { deep: true })
   font-size: 14.5px;
   font-family: inherit;
 }
-.chat-input input::placeholder { color: var(--ios-tertiary, #8e8e93); }
+
+.chat-input input::placeholder {
+  color: var(--ios-tertiary, #8e8e93);
+}
+
 .send-btn {
-  width: 38px; height: 38px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   border: none;
   background: var(--ios-blue, #007aff);
@@ -330,13 +413,30 @@ watch(messages, scrollToBottom, { deep: true })
   flex-shrink: 0;
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
-.send-btn:disabled { opacity: 0.4; cursor: default; }
-.send-btn:not(:disabled):active { transform: scale(0.9); }
-.send-btn svg { width: 18px; height: 18px; }
+
+.send-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.send-btn:not(:disabled):active {
+  transform: scale(0.9);
+}
+
+.send-btn svg {
+  width: 18px;
+  height: 18px;
+}
 
 /* ── Transition ── */
-.chat-pop-enter-active { transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.chat-pop-leave-active { transition: all 0.2s ease; }
+.chat-pop-enter-active {
+  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.chat-pop-leave-active {
+  transition: all 0.2s ease;
+}
+
 .chat-pop-enter-from,
 .chat-pop-leave-to {
   opacity: 0;
@@ -344,7 +444,11 @@ watch(messages, scrollToBottom, { deep: true })
 }
 
 @media (max-width: 480px) {
-  .chat-widget { bottom: 16px; right: 16px; }
+  .chat-widget {
+    bottom: 16px;
+    right: 16px;
+  }
+
   .chat-panel {
     width: calc(100vw - 24px);
     height: 70dvh;

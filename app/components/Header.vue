@@ -3,22 +3,9 @@
     <div class="nav-content">
 
       <!-- QR Button -->
-      <button
-        class="nav-btn qr-btn"
-        @click="$emit('toggle-qr')"
-        title="QR Generator"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+      <button class="nav-btn qr-btn" @click="$emit('toggle-qr')" title="QR Generator">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="3" width="7" height="7" />
           <rect x="14" y="3" width="7" height="7" />
           <rect x="14" y="14" width="7" height="7" />
@@ -30,14 +17,9 @@
       <div class="nav-title">
         <NuxtLink to="/" class="brand-link" aria-label="Stardust Cafe — Home">
           <svg class="brand-logo" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path
-              class="brand-stroke"
+            <path class="brand-stroke"
               d="M52,156 L52,120 C52,98 64,90 84,92 C104,94 108,124 120,142 C128,154 137,154 147,140 C156,127 160,106 178,106 C197,106 199,138 182,152 C172,160 159,158 152,145"
-              fill="none"
-              stroke-width="44"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
+              fill="none" stroke-width="44" stroke-linecap="round" stroke-linejoin="round" />
             <circle class="brand-dot" cx="190" cy="74" r="22" />
           </svg>
           <h1>Stardust Cafe</h1>
@@ -48,60 +30,41 @@
       <div class="nav-actions">
 
         <!-- Dark mode toggle -->
-        <button
-          class="nav-btn theme-btn"
-          @click="toggleTheme"
-          :title="theme === 'dark' ? 'Light mode' : 'Dark mode'"
-        >
-          <svg v-if="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <button class="nav-btn theme-btn" @click="toggleTheme" :title="theme === 'dark' ? 'Light mode' : 'Dark mode'">
+          <svg v-if="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="5" />
-            <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-            <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
           </svg>
-          <svg v-else xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg v-else xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
           </svg>
         </button>
 
         <!-- Language toggle -->
-        <button
-          class="nav-btn lang-btn"
-          @click="toggleLang"
-          :title="lang === 'en' ? 'ប្ដូរទៅភាសាខ្មែរ' : 'Switch to English'"
-        >
+        <button class="nav-btn lang-btn" @click="toggleLang"
+          :title="lang === 'en' ? 'ប្ដូរទៅភាសាខ្មែរ' : 'Switch to English'">
           {{ lang === 'en' ? 'ខ្មែរ' : 'EN' }}
         </button>
 
         <!-- Cart -->
-        <button
-          class="nav-btn cart-btn"
-          @click="$emit('toggle-cart')"
-          title="Your Order"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
+        <button class="nav-btn cart-btn" @click="$emit('toggle-cart')" title="Your Order">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="21" r="1" />
             <circle cx="20" cy="21" r="1" />
-            <path
-              d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
-            />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
           </svg>
 
-          <span
-            class="cart-badge"
-            v-if="totalItems > 0"
-          >
+          <span class="cart-badge" v-if="totalItems > 0">
             {{ totalItems }}
           </span>
         </button>
@@ -208,7 +171,7 @@ const { theme, toggleTheme } = useTheme()
   position: relative;
   background: none;
   border: none;
-  color: #007aff;
+  color: var(--ios-blue, #007aff);
   cursor: pointer;
   width: 42px;
   height: 42px;
@@ -239,8 +202,7 @@ const { theme, toggleTheme } = useTheme()
   background: rgba(0, 122, 255, 0.12);
 }
 
-.cart-badge,
-.notification-badge {
+.cart-badge {
   position: absolute;
   top: 2px;
   right: 2px;
@@ -257,18 +219,6 @@ const { theme, toggleTheme } = useTheme()
   padding: 0 5px;
   border: 2px solid #fff;
   box-sizing: border-box;
-}
-
-.notification-btn {
-  color: #ff9500;
-}
-
-.cart-btn {
-  color: #007aff;
-}
-
-.qr-btn {
-  color: #007aff;
 }
 
 @media (max-width: 480px) {

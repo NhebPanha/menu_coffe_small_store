@@ -2,14 +2,10 @@
   <Transition name="fade">
     <div class="cart-overlay" v-if="isOpen" @click="$emit('close')"></div>
   </Transition>
-  
-  <NotificationDropdown 
-    :isVisible="showNotification"
-    title="Order Sent!"
-    message="Your order has been sent to Telegram"
-    @close="showNotification = false"
-  />
-  
+
+  <NotificationDropdown :isVisible="showNotification" title="Order Sent!" message="Your order has been sent to Telegram"
+    @close="showNotification = false" />
+
   <div class="cart-panel" :class="{ 'open': isOpen }">
     <div class="cart-header">
       <button class="nav-text-btn clear-all-btn" v-if="cart.length > 0" @click="clearCart">{{ t('clear') }}</button>
@@ -19,12 +15,13 @@
 
       <button class="nav-text-btn close-btn" @click="$emit('close')">{{ t('done') }}</button>
     </div>
-    
+
     <div class="cart-content">
       <div class="cart-scroll-area" v-if="cart.length > 0">
         <div class="ios-section-header">{{ t('yourItems') }}</div>
         <div class="ios-grouped-card">
-          <div v-for="(item, index) in cart" :key="item.id" class="cart-row" :class="{ 'no-border': index === cart.length - 1 }">
+          <div v-for="(item, index) in cart" :key="item.id" class="cart-row"
+            :class="{ 'no-border': index === cart.length - 1 }">
             <img v-if="item.image" :src="resolveImageUrl(item.image)" :alt="item.en" class="row-image" />
             <div class="row-details">
               <div class="row-name">{{ item.en }}</div>
@@ -35,29 +32,21 @@
               </div>
               <div class="row-price-line">
                 <span class="row-price">${{ lineTotal(item).toFixed(2) }}</span>
-                <span class="row-old-price" v-if="hasDiscount(item)">${{ (lineTotal(item) + lineDiscount(item)).toFixed(2) }}</span>
-                <span class="row-save-chip" v-if="hasDiscount(item)">{{ t('save') }} ${{ lineDiscount(item).toFixed(2) }}</span>
+                <span class="row-old-price" v-if="hasDiscount(item)">${{ (lineTotal(item) +
+                  lineDiscount(item)).toFixed(2) }}</span>
+                <span class="row-save-chip" v-if="hasDiscount(item)">{{ t('save') }} ${{ lineDiscount(item).toFixed(2)
+                  }}</span>
               </div>
               <div class="row-toppings">
-                <button
-                  v-for="(label, key) in TOPPING_LABELS"
-                  :key="key"
-                  class="topping-chip"
-                  :class="{ active: item.toppings?.[key] }"
-                  @click="toggleTopping(item.id, key)"
-                >
+                <button v-for="(label, key) in TOPPING_LABELS" :key="key" class="topping-chip"
+                  :class="{ active: item.toppings?.[key] }" @click="toggleTopping(item.id, key)">
                   {{ item.toppings?.[key] ? '✓' : '+' }} {{ t(key) }} ${{ TOPPING_PRICE.toFixed(2) }}
                 </button>
               </div>
               <div class="row-sugar">
                 <span class="sugar-label">🍬 {{ t('sugar') }}</span>
-                <button
-                  v-for="level in SUGAR_LEVELS"
-                  :key="level"
-                  class="sugar-chip"
-                  :class="{ active: (item.sugar ?? 100) === level }"
-                  @click="setSugar(item.id, level)"
-                >
+                <button v-for="level in SUGAR_LEVELS" :key="level" class="sugar-chip"
+                  :class="{ active: (item.sugar ?? 100) === level }" @click="setSugar(item.id, level)">
                   {{ level }}%
                 </button>
               </div>
@@ -65,44 +54,42 @@
             <div class="row-actions">
               <div class="ios-stepper">
                 <button class="stepper-btn minus" @click="removeFromCart(item.id)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12" />
                   </svg>
                 </button>
                 <span class="stepper-val">{{ item.quantity }}</span>
                 <button class="stepper-btn plus" @click="addToCart(item)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
                   </svg>
                 </button>
               </div>
             </div>
           </div>
         </div>
-        
+
         <div class="ios-section-header">{{ t('customerDetails') }}</div>
         <div class="ios-grouped-card">
           <div class="input-row">
             <span class="input-icon">👤</span>
-            <input
-              v-model="customerName"
-              type="text"
-              class="customer-name-input"
-              :placeholder="t('namePlaceholder')"
-            />
+            <input v-model="customerName" type="text" class="customer-name-input" :placeholder="t('namePlaceholder')" />
+          </div>
+          <div class="input-row">
+            <span class="input-icon">📱</span>
+            <input v-model="customerPhone" type="tel" inputmode="tel" class="customer-name-input"
+              :class="{ 'input-error': phoneError }" :placeholder="t('phonePlaceholder') + ' *'" />
           </div>
           <div class="input-row">
             <span class="input-icon">🪑</span>
-            <input
-              v-model="tableNumber"
-              type="text"
-              class="customer-name-input"
-              :placeholder="t('tablePlaceholder')"
-            />
+            <input v-model="tableNumber" type="text" class="customer-name-input" :placeholder="t('tablePlaceholder')" />
           </div>
         </div>
       </div>
-      
+
       <div class="empty-cart" v-else>
         <div class="empty-illustration">🥤</div>
         <h3 class="empty-title">{{ t('emptyTitle') }}</h3>
@@ -119,18 +106,20 @@
         <span class="total-label">{{ t('total') }}</span>
         <span class="total-price">${{ totalPrice.toFixed(2) }}</span>
       </div>
-      
+
       <div class="checkout-actions">
         <button class="ios-btn wa-btn" @click="handleCheckout">
           <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.197 1.451 4.793 1.451 5.485 0 9.948-4.469 9.952-9.96.002-2.66-1.023-5.158-2.887-7.027A9.857 9.857 0 0 0 11.999 1.45c-5.49 0-9.953 4.471-9.957 9.963 0 1.9.497 3.753 1.442 5.358l-.995 3.633 3.558-.934zM18.23 15.22c-.34-.17-2.012-.993-2.321-1.105-.31-.113-.536-.17-.76.17-.225.34-.87 1.102-1.066 1.328-.197.226-.394.254-.734.084-.34-.17-1.437-.53-2.738-1.691-1.012-.903-1.696-2.02-1.894-2.36-.197-.34-.02-.524.15-.694.153-.153.34-.396.51-.594.17-.198.226-.34.34-.565.113-.226.056-.424-.028-.593-.085-.17-.76-1.834-1.042-2.513-.275-.662-.555-.572-.76-.583-.197-.01-.423-.01-.648-.01-.225 0-.592.085-.902.424-.31.34-1.183 1.158-1.183 2.825 0 1.667 1.212 3.277 1.382 3.503.17.226 2.385 3.642 5.776 5.102.806.347 1.436.554 1.928.71.81.258 1.547.222 2.13.135.65-.098 2.013-.82 2.295-1.58.28-.762.28-1.413.197-1.55-.084-.136-.31-.22-.65-.39z"/>
+            <path
+              d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.197 1.451 4.793 1.451 5.485 0 9.948-4.469 9.952-9.96.002-2.66-1.023-5.158-2.887-7.027A9.857 9.857 0 0 0 11.999 1.45c-5.49 0-9.953 4.471-9.957 9.963 0 1.9.497 3.753 1.442 5.358l-.995 3.633 3.558-.934zM18.23 15.22c-.34-.17-2.012-.993-2.321-1.105-.31-.113-.536-.17-.76.17-.225.34-.87 1.102-1.066 1.328-.197.226-.394.254-.734.084-.34-.17-1.437-.53-2.738-1.691-1.012-.903-1.696-2.02-1.894-2.36-.197-.34-.02-.524.15-.694.153-.153.34-.396.51-.594.17-.198.226-.34.34-.565.113-.226.056-.424-.028-.593-.085-.17-.76-1.834-1.042-2.513-.275-.662-.555-.572-.76-.583-.197-.01-.423-.01-.648-.01-.225 0-.592.085-.902.424-.31.34-1.183 1.158-1.183 2.825 0 1.667 1.212 3.277 1.382 3.503.17.226 2.385 3.642 5.776 5.102.806.347 1.436.554 1.928.71.81.258 1.547.222 2.13.135.65-.098 2.013-.82 2.295-1.58.28-.762.28-1.413.197-1.55-.084-.136-.31-.22-.65-.39z" />
           </svg>
           {{ t('orderWhatsapp') }}
         </button>
-        
+
         <button class="ios-btn tg-btn" @click="handleTelegramCheckout">
           <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M11.944 0C5.357 0 0 5.357 0 12s5.357 12 12 12 12-5.357 12-12S18.527 0 11.944 0zm5.636 8.324l-1.922 9.062c-.143.64-.523.796-1.057.496l-2.929-2.158-1.413 1.36c-.156.156-.287.287-.588.287l.21-2.98 5.426-4.9c.235-.21-.051-.326-.366-.117L9.22 13.916l-2.89-.903c-.628-.196-.64-.628.13-.928l11.295-4.354c.523-.19.98.12.825.593z"/>
+            <path
+              d="M11.944 0C5.357 0 0 5.357 0 12s5.357 12 12 12 12-5.357 12-12S18.527 0 11.944 0zm5.636 8.324l-1.922 9.062c-.143.64-.523.796-1.057.496l-2.929-2.158-1.413 1.36c-.156.156-.287.287-.588.287l.21-2.98 5.426-4.9c.235-.21-.051-.326-.366-.117L9.22 13.916l-2.89-.903c-.628-.196-.64-.628.13-.928l11.295-4.354c.523-.19.98.12.825.593z" />
           </svg>
           {{ t('orderTelegram') }}
         </button>
@@ -154,14 +143,30 @@ const { cart, tableNumber, addToCart, removeFromCart, toggleTopping, setSugar, t
 const { t } = useLang()
 const { resolveImageUrl } = useImageUrl()
 const customerName = ref('')
+const customerPhone = ref('')
+const phoneError = ref(false)
 const showNotification = ref(false)
+
+// Phone is required to place an order. Returns true when it's filled in;
+// otherwise flags the field and warns the customer.
+const ensurePhone = () => {
+  if (customerPhone.value.trim()) {
+    phoneError.value = false
+    return true
+  }
+  phoneError.value = true
+  alert(t('phoneRequired'))
+  return false
+}
 
 const generateOrderMessage = () => {
   const name = customerName.value.trim() || 'Customer'
+  const phone = customerPhone.value.trim()
   const table = tableNumber.value?.trim()
 
   let message = `════════════════════\n`
   message += `🧾 ORDER: ${name}\n`
+  message += `📱 PHONE: ${phone}\n`
 
   if (table) {
     message += `🪑 TABLE: ${table}\n`
@@ -199,27 +204,38 @@ const generateOrderMessage = () => {
 }
 
 const handleCheckout = () => {
-  const phoneNumber = "1234567890" 
+  if (!ensurePhone()) return
+  const phoneNumber = '1234567890' // TODO: replace with the cafe's WhatsApp number
   const message = generateOrderMessage()
-  window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank')
+  window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank')
+  resetCustomer()
   clearCart()
   emit('close')
 }
 
+// Clear the customer fields after an order is sent
+const resetCustomer = () => {
+  customerPhone.value = ''
+  phoneError.value = false
+}
+
 const handleTelegramCheckout = async () => {
+  if (!ensurePhone()) return
   try {
     const response = await $fetch('/api/telegram/send-order', {
       method: 'POST',
       body: {
         customerName: customerName.value.trim() || 'Guest',
+        customerPhone: customerPhone.value.trim(),
         tableNumber: tableNumber.value?.trim(),
         items: cart.value,
         totalPrice: totalPrice.value
       }
     })
-    
+
     if (response.success) {
       showNotification.value = true
+      resetCustomer()
       clearCart()
       emit('close')
     } else {
@@ -254,7 +270,7 @@ const handleTelegramCheckout = async () => {
   height: 100vh;
   background: var(--ios-bg, #f2f2f7);
   z-index: 1000;
-  box-shadow: -10px 0 30px rgba(0,0,0,0.12);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.12);
   transform: translateX(100%);
   transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   display: flex;
@@ -357,7 +373,7 @@ const handleTelegramCheckout = async () => {
   border-radius: 10px;
   margin: 0 16px 16px;
   overflow: hidden;
-  box-shadow: 0 0 0 0.5px rgba(0,0,0,0.04);
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.04);
 }
 
 .cart-row {
@@ -580,6 +596,11 @@ const handleTelegramCheckout = async () => {
   color: var(--ios-tertiary, #8e8e93);
 }
 
+/* Required field that was left empty on checkout */
+.customer-name-input.input-error::placeholder {
+  color: var(--ios-red, #ff3b30);
+}
+
 .empty-cart {
   flex: 1;
   display: flex;
@@ -593,13 +614,20 @@ const handleTelegramCheckout = async () => {
 .empty-illustration {
   font-size: 64px;
   margin-bottom: 16px;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.06));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.06));
   animation: float 3s ease-in-out infinite;
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 .empty-title {

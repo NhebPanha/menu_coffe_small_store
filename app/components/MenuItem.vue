@@ -5,26 +5,29 @@
       <img v-if="item.image" :src="resolveImageUrl(item.image)" :alt="item.en" class="card-image" />
       <Transition name="fade">
         <div class="added-overlay" v-if="showToast">
-          <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
         </div>
       </Transition>
     </div>
-    
+
     <div class="card-info">
       <div class="card-name">{{ item.en }}</div>
       <div class="card-khmer">{{ item.kh }}</div>
       <div class="card-chinese" v-if="item.zh">{{ item.zh }}</div>
-      
+
       <div class="card-footer">
         <div class="card-price-group">
           <div class="card-price">${{ item.price.toFixed(2) }}</div>
           <div class="card-old-price" v-if="hasPromo">${{ item.oldPrice.toFixed(2) }}</div>
         </div>
         <button class="add-btn" @click.stop="handleAdd">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
         </button>
       </div>
@@ -66,7 +69,7 @@ const handleAdd = () => {
   background: var(--ios-card, #ffffff);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 0 0 0.5px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.03);
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.03);
   display: flex;
   flex-direction: column;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -74,10 +77,12 @@ const handleAdd = () => {
   -webkit-user-select: none;
   user-select: none;
 }
+
 .menu-card:active {
   transform: scale(0.96);
-  box-shadow: 0 0 0 0.5px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.02);
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.04), 0 1px 4px rgba(0, 0, 0, 0.02);
 }
+
 .card-image-wrapper {
   position: relative;
   width: 100%;
@@ -85,15 +90,18 @@ const handleAdd = () => {
   overflow: hidden;
   background: var(--ios-image-bg, #f2f2f7);
 }
+
 .card-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
+
 .menu-card:hover .card-image {
   transform: scale(1.04);
 }
+
 .added-overlay {
   position: absolute;
   top: 0;
@@ -109,19 +117,30 @@ const handleAdd = () => {
   color: white;
   z-index: 2;
 }
+
 .check-icon {
   animation: checkPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
 @keyframes checkPop {
-  0% { transform: scale(0.5); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
+
 .card-info {
   padding: 10px 12px 12px;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
+
 .card-name {
   font-size: 14px;
   font-weight: 600;
@@ -135,6 +154,7 @@ const handleAdd = () => {
   height: 35px;
   margin-bottom: 2px;
 }
+
 .card-khmer {
   font-size: 12px;
   color: var(--ios-secondary, #3c3c43);
@@ -144,6 +164,7 @@ const handleAdd = () => {
   text-overflow: ellipsis;
   margin-bottom: 1px;
 }
+
 .card-chinese {
   font-size: 11px;
   color: var(--ios-tertiary, #8e8e93);
@@ -152,12 +173,14 @@ const handleAdd = () => {
   text-overflow: ellipsis;
   margin-bottom: 8px;
 }
+
 .card-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
 }
+
 .promo-badge {
   position: absolute;
   top: 8px;
@@ -170,24 +193,28 @@ const handleAdd = () => {
   letter-spacing: -0.2px;
   padding: 3px 7px;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
 }
+
 .card-price-group {
   display: flex;
   align-items: baseline;
   gap: 6px;
 }
+
 .card-price {
   font-size: 15px;
   font-weight: 700;
   color: var(--ios-blue, #007aff);
 }
+
 .card-old-price {
   font-size: 12px;
   font-weight: 500;
   color: var(--ios-tertiary, #8e8e93);
   text-decoration: line-through;
 }
+
 .add-btn {
   width: 28px;
   height: 28px;
@@ -201,16 +228,19 @@ const handleAdd = () => {
   justify-content: center;
   transition: background 0.15s, transform 0.1s;
 }
+
 .add-btn:active {
   background: rgba(0, 122, 255, 0.2);
   transform: scale(0.9);
 }
-.fade-enter-active, .fade-leave-active {
+
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.2s ease;
 }
-.fade-enter-from, .fade-leave-to {
+
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
-
-
 </style>

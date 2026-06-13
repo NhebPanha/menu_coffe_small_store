@@ -13,6 +13,8 @@ const dict = {
   yourItems:        { en: 'Your Items', kh: 'ទំនិញរបស់អ្នក' },
   customerDetails:  { en: 'Customer Details', kh: 'ព័ត៌មានអតិថិជន' },
   namePlaceholder:  { en: 'Your Name', kh: 'ឈ្មោះរបស់អ្នក' },
+  phonePlaceholder: { en: 'Phone Number', kh: 'លេខទូរស័ព្ទ' },
+  phoneRequired:    { en: 'Please enter your phone number to place the order.', kh: 'សូមបញ្ចូលលេខទូរស័ព្ទរបស់អ្នកដើម្បីកម្ម៉ង់។' },
   tablePlaceholder: { en: 'Table Number (Optional)', kh: 'លេខតុ (ស្រេចចិត្ត)' },
   total:            { en: 'Total', kh: 'សរុប' },
   discount:         { en: 'Discount', kh: 'បញ្ចុះតម្លៃ' },

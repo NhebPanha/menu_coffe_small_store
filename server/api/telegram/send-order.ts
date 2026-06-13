@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const { customerName, tableNumber, items } = body
+    const { customerName, customerPhone, tableNumber, items } = body
     const now = new Date()
 
     // Parse chat_id as number if it's numeric, otherwise use as string
@@ -60,6 +60,7 @@ export default defineEventHandler(async (event) => {
     m += `⏰ Time: ${timeStr}\n`
     m += `${line}\n\n`
     m += `👤 Customer: ${customerName || 'Guest'}\n`
+    if (customerPhone) m += `📱 Phone: ${customerPhone}\n`
     if (tableNumber) m += `🪑 Table: ${tableNumber}\n`
     m += `\n☕ Order Details\n\n`
 

@@ -111,8 +111,7 @@ const orderTotal = (items: Product[]) => items.reduce((sum, p) => sum + p.price,
 
 // Summary of the items being ordered, one per line, with the total
 const orderSummary = (items: Product[], lang: Lang): string =>
-  `${items.map(p => formatProduct(p, lang)).join('\n')}\n${
-    lang === 'kh' ? 'សរុប' : 'Total'
+  `${items.map(p => formatProduct(p, lang)).join('\n')}\n${lang === 'kh' ? 'សរុប' : 'Total'
   }: ${money(orderTotal(items))}`
 
 export default defineEventHandler(async (event) => {
@@ -214,11 +213,11 @@ export default defineEventHandler(async (event) => {
           reply =
             lang === 'kh'
               ? `យើងមាន ${categories.length} ប្រភេទ៖\n` +
-                categories.map(c => `• ${catLabel(c, 'kh')}`).join('\n') +
-                `\n\nសួរប្រភេទណាមួយ (ឧ. "កាហ្វេ") ដើម្បីមើលភេសជ្ជៈ និងតម្លៃ។`
+              categories.map(c => `• ${catLabel(c, 'kh')}`).join('\n') +
+              `\n\nសួរប្រភេទណាមួយ (ឧ. "កាហ្វេ") ដើម្បីមើលភេសជ្ជៈ និងតម្លៃ។`
               : `We have ${categories.length} categories:\n` +
-                categories.map(c => `• ${c}`).join('\n') +
-                `\n\nAsk for any of them (e.g. "Coffee") to see drinks and prices.`
+              categories.map(c => `• ${c}`).join('\n') +
+              `\n\nAsk for any of them (e.g. "Coffee") to see drinks and prices.`
         } else if (/\b(cheap|cheapest|lowest|affordable)\b/.test(l) || msg.includes('ថោក')) {
           const cheapest = [...PRODUCTS].sort((a, b) => a.price - b.price).slice(0, 3)
           reply =

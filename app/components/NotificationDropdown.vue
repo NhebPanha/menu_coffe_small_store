@@ -5,8 +5,10 @@
         <div class="notification-icon">
           <div class="checkmark-circle">
             <svg class="checkmark" viewBox="0 0 52 52">
-              <circle class="checkmark-circle-outline" cx="26" cy="26" r="25" fill="none" stroke="white" stroke-width="2"/>
-              <path class="checkmark-check" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+              <circle class="checkmark-circle-outline" cx="26" cy="26" r="25" fill="none" stroke="white"
+                stroke-width="2" />
+              <path class="checkmark-check" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"
+                stroke-linejoin="round" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
             </svg>
           </div>
         </div>
@@ -16,8 +18,8 @@
         </div>
         <div class="notification-close" @click="closeNotification">
           <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         </div>
       </div>
@@ -96,8 +98,8 @@ onMounted(() => {
   border-radius: 14px;
   padding: 16px 18px;
   box-shadow: 0 20px 50px rgba(52, 199, 89, 0.4),
-              0 0 1px rgba(0, 0, 0, 0.1),
-              inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    0 0 1px rgba(0, 0, 0, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   position: relative;
@@ -111,12 +113,10 @@ onMounted(() => {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
-  );
+  background: linear-gradient(45deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent);
   animation: shimmer 2s infinite;
 }
 
@@ -226,9 +226,11 @@ onMounted(() => {
     transform: scale(0);
     opacity: 0;
   }
+
   50% {
     transform: scale(1.1);
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
@@ -240,6 +242,7 @@ onMounted(() => {
     opacity: 0;
     transform: translateX(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -251,6 +254,7 @@ onMounted(() => {
     opacity: 0;
     transform: translateX(10px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -261,6 +265,7 @@ onMounted(() => {
   0% {
     transform: translateX(-100%) translateY(-100%) rotate(45deg);
   }
+
   100% {
     transform: translateX(100%) translateY(100%) rotate(45deg);
   }
@@ -270,6 +275,7 @@ onMounted(() => {
   from {
     width: 100%;
   }
+
   to {
     width: 0;
   }
@@ -294,7 +300,7 @@ onMounted(() => {
 @media (prefers-color-scheme: dark) {
   .notification-card {
     box-shadow: 0 20px 50px rgba(52, 199, 89, 0.3),
-                0 0 1px rgba(0, 0, 0, 0.5);
+      0 0 1px rgba(0, 0, 0, 0.5);
   }
 }
 

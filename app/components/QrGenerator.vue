@@ -2,19 +2,20 @@
   <Transition name="fade">
     <div class="modal-overlay" v-if="isOpen" @click="$emit('close')"></div>
   </Transition>
-  
+
   <div class="modal-panel" :class="{ 'open': isOpen }">
     <div class="modal-header">
       <h2 class="nav-title">QR Generator</h2>
       <button class="nav-text-btn close-btn" @click="$emit('close')">Done</button>
     </div>
-    
+
     <div class="modal-content">
       <div class="scroll-area">
         <p class="description">
-          Generate custom QR codes for your tables. Print them out so customers can scan to instantly open the menu with their table number pre-selected.
+          Generate custom QR codes for your tables. Print them out so customers can scan to instantly open the menu with
+          their table number pre-selected.
         </p>
-        
+
         <!-- Live QR Code Card Preview -->
         <div class="qr-preview-card" id="qr-card-to-print">
           <div class="card-branding">
@@ -22,11 +23,11 @@
             <h3 class="brand-name">Stardust Cafe</h3>
             <p class="brand-sub">Scan to Order</p>
           </div>
-          
+
           <div class="qr-container">
             <img :src="qrImageUrl" alt="QR Code" class="qr-image" />
           </div>
-          
+
           <div class="card-table-badge" v-if="tableVal">
             TABLE {{ tableVal }}
           </div>
@@ -34,25 +35,20 @@
             MAIN MENU
           </div>
         </div>
-        
+
         <!-- Controls -->
         <div class="ios-section-header">Configurations</div>
         <div class="ios-grouped-card">
           <div class="input-row">
             <span class="input-icon">🪑</span>
-            <input 
-              v-model="tableVal" 
-              type="text" 
-              class="ios-input" 
-              placeholder="Table Number (e.g. 5, A1)" 
-            />
+            <input v-model="tableVal" type="text" class="ios-input" placeholder="Table Number (e.g. 5, A1)" />
           </div>
           <div class="url-display-row">
             <span class="url-label">Redirect Link:</span>
             <span class="url-text">{{ fullUrl }}</span>
           </div>
         </div>
-        
+
         <!-- Actions -->
         <div class="action-buttons">
           <button class="ios-action-btn print-btn" @click="handlePrint">
@@ -109,10 +105,10 @@ const handleCopy = async () => {
 const handlePrint = () => {
   const printWindow = window.open('', '_blank')
   if (!printWindow) return
-  
+
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(fullUrl.value)}&margin=10`
   const tableText = tableVal.value.trim() ? `TABLE ${tableVal.value.trim()}` : 'SCAN TO ORDER'
-  
+
   printWindow.document.write(`
     <html>
       <head>
@@ -197,7 +193,7 @@ const handlePrint = () => {
       <body>
         <div class="card">
           <div class="cafe-logo">☕</div>
-          <h1 class="cafe-name">stardustcafebotust Cafe</h1>
+          <h1 class="cafe-name">Stardust Cafe</h1>
           <p class="tagline">Scan to View Menu & Order</p>
           <div class="qr-container">
             <img class="qr-img" src="${qrUrl}" alt="QR Code" />
@@ -240,10 +236,10 @@ const handlePrint = () => {
   height: 100vh;
   background: var(--ios-bg, #f2f2f7);
   z-index: 1000;
-  box-shadow: 10px 0 30px rgba(0,0,0,0.12);
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.12);
   transform: translateX(-100%);
   transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-              background-color 0.3s ease;
+    background-color 0.3s ease;
   display: flex;
   flex-direction: column;
 }
@@ -336,7 +332,7 @@ const handlePrint = () => {
   background: #ffffff;
   border-radius: 20px;
   padding: 32px 24px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
   border: 0.5px solid var(--ios-separator, rgba(60, 60, 67, 0.12));
   display: flex;
   flex-direction: column;
@@ -373,7 +369,7 @@ const handlePrint = () => {
   padding: 12px;
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   margin-bottom: 20px;
   border: 0.5px solid var(--ios-separator, rgba(60, 60, 67, 0.08));
 }
@@ -415,7 +411,7 @@ const handlePrint = () => {
   border-radius: 10px;
   margin-bottom: 24px;
   overflow: hidden;
-  box-shadow: 0 0 0 0.5px rgba(0,0,0,0.04);
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.04);
   transition: background-color 0.3s ease;
 }
 
