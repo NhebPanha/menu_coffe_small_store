@@ -64,25 +64,37 @@ export default defineEventHandler(async (event) => {
     m += `\n☕ Order Details\n\n`
 
     let subtotal = 0
+    let discount = 0
     items.forEach((item: any, i: number) => {
       const tops = Object.keys(TOPPING_LABELS).filter(k => item.toppings?.[k])
       const addonCost = tops.length * TOPPING_PRICE
-      const unit = item.price + addonCost
+      const onPromo = typeof item.oldPrice === 'number' && item.oldPrice > item.price
+      // bill against the original price; promo saving is collected into `discount`
+      const baseUnit = onPromo ? item.oldPrice : item.price
+      const unit = baseUnit + addonCost
       const lineSubtotal = unit * item.quantity
+      const lineDiscount = onPromo ? (item.oldPrice - item.price) * item.quantity : 0
       subtotal += lineSubtotal
+      discount += lineDiscount
 
       m += `${i + 1}. ${item.en} (${item.kh})${item.zh ? ` ${item.zh}` : ''}\n`
       m += `   Qty      : ${item.quantity}\n`
-      m += `   Unit     : $${item.price.toFixed(2)}\n`
+      if (onPromo) {
+        m += `   Unit     : $${item.price.toFixed(2)} (was $${item.oldPrice.toFixed(2)})\n`
+      } else {
+        m += `   Unit     : $${item.price.toFixed(2)}\n`
+      }
       if (tops.length) {
         m += `   Add-on   : ${tops.map(k => TOPPING_LABELS[k]).join(', ')} (+$${addonCost.toFixed(2)})\n`
       }
       m += `   Sugar    : ${item.sugar ?? 100}%\n`
+      if (lineDiscount > 0) {
+        m += `   🏷️ Save   : -$${lineDiscount.toFixed(2)}\n`
+      }
       m += `   Subtotal : $${lineSubtotal.toFixed(2)}\n\n`
     })
 
     const tax = 0
-    const discount = 0
     const total = subtotal + tax - discount
 
     m += `${line}\n`

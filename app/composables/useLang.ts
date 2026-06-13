@@ -15,6 +15,8 @@ const dict = {
   namePlaceholder:  { en: 'Your Name', kh: 'ឈ្មោះរបស់អ្នក' },
   tablePlaceholder: { en: 'Table Number (Optional)', kh: 'លេខតុ (ស្រេចចិត្ត)' },
   total:            { en: 'Total', kh: 'សរុប' },
+  discount:         { en: 'Discount', kh: 'បញ្ចុះតម្លៃ' },
+  save:             { en: 'Save', kh: 'សន្សំ' },
   orderWhatsapp:    { en: 'Order via WhatsApp', kh: 'កម្ម៉ង់តាម WhatsApp' },
   orderTelegram:    { en: 'Order via Telegram', kh: 'កម្ម៉ង់តាម Telegram' },
   emptyTitle:       { en: 'Your Cart is Empty', kh: 'កន្ត្រករបស់អ្នកទទេ' },

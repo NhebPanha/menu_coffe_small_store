@@ -7,6 +7,7 @@ type Product = {
   kh: string
   zh?: string
   price: number
+  oldPrice?: number
   category: string
 }
 
@@ -24,6 +25,7 @@ const PRODUCTS: Product[] = (() => {
         kh: item.kh,
         zh: (item as any).zh,
         price: item.price,
+        oldPrice: (item as any).oldPrice,
         category: cat.category
       })
     }
@@ -44,11 +46,17 @@ const catLabel = (c: string, lang: Lang) => (lang === 'kh' ? CATEGORY_KH[c] ?? c
 
 const money = (n: number) => `$${n.toFixed(2)}`
 
+const onPromo = (p: Product) => typeof p.oldPrice === 'number' && p.oldPrice > p.price
+
+// price text, with the original struck-through note when the item is on promo
+const priceLabel = (p: Product) =>
+  onPromo(p) ? `🏷️ ${money(p.price)} (was ${money(p.oldPrice as number)})` : money(p.price)
+
 // Khmer first when in Khmer mode, English first otherwise
 const formatProduct = (p: Product, lang: Lang) =>
   lang === 'kh'
-    ? `• ${p.kh} (${p.en}) — ${money(p.price)}`
-    : `• ${p.en} (${p.kh})${p.zh ? ` ${p.zh}` : ''} — ${money(p.price)}`
+    ? `• ${p.kh} (${p.en}) — ${priceLabel(p)}`
+    : `• ${p.en} (${p.kh})${p.zh ? ` ${p.zh}` : ''} — ${priceLabel(p)}`
 
 const hasKhmer = (text: string) => /[ក-៿]/.test(text)
 
@@ -186,10 +194,12 @@ export default defineEventHandler(async (event) => {
       const matched = findProducts(msg)
       const only = matched[0]
       if (matched.length === 1 && only) {
+        const promoKh = onPromo(only) ? ` (បញ្ចុះតម្លៃ ពី ${money(only.oldPrice as number)})` : ''
+        const promoEn = onPromo(only) ? ` (on promo, was ${money(only.oldPrice as number)})` : ''
         reply =
           lang === 'kh'
-            ? `${only.kh} (${only.en}) តម្លៃ ${money(only.price)} — ស្ថិតក្នុង ${catLabel(only.category, 'kh')}។`
-            : `${only.en} (${only.kh})${only.zh ? ` ${only.zh}` : ''} is ${money(only.price)} — from our ${only.category}.`
+            ? `${only.kh} (${only.en}) តម្លៃ ${money(only.price)}${promoKh} — ស្ថិតក្នុង ${catLabel(only.category, 'kh')}។`
+            : `${only.en} (${only.kh})${only.zh ? ` ${only.zh}` : ''} is ${money(only.price)}${promoEn} — from our ${only.category}.`
       } else if (matched.length > 1) {
         reply =
           (lang === 'kh' ? 'នេះជាអ្វីដែលរកឃើញ៖\n' : "Here's what I found:\n") +

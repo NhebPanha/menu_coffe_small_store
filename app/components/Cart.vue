@@ -33,7 +33,11 @@
                 <span v-if="item.zh" class="zh-divider">·</span>
                 <span v-if="item.zh" class="row-zh">{{ item.zh }}</span>
               </div>
-              <div class="row-price">${{ lineTotal(item).toFixed(2) }}</div>
+              <div class="row-price-line">
+                <span class="row-price">${{ lineTotal(item).toFixed(2) }}</span>
+                <span class="row-old-price" v-if="hasDiscount(item)">${{ (lineTotal(item) + lineDiscount(item)).toFixed(2) }}</span>
+                <span class="row-save-chip" v-if="hasDiscount(item)">{{ t('save') }} ${{ lineDiscount(item).toFixed(2) }}</span>
+              </div>
               <div class="row-toppings">
                 <button
                   v-for="(label, key) in TOPPING_LABELS"
@@ -107,6 +111,10 @@
     </div>
 
     <div class="cart-footer" v-if="cart.length > 0">
+      <div class="discount-row" v-if="totalDiscount > 0">
+        <span class="discount-label">🏷️ {{ t('discount') }}</span>
+        <span class="discount-value">−${{ totalDiscount.toFixed(2) }}</span>
+      </div>
       <div class="total-row">
         <span class="total-label">{{ t('total') }}</span>
         <span class="total-price">${{ totalPrice.toFixed(2) }}</span>
@@ -142,7 +150,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close'])
-const { cart, tableNumber, addToCart, removeFromCart, toggleTopping, setSugar, totalPrice, clearCart } = useCart()
+const { cart, tableNumber, addToCart, removeFromCart, toggleTopping, setSugar, totalPrice, totalDiscount, clearCart } = useCart()
 const { t } = useLang()
 const { resolveImageUrl } = useImageUrl()
 const customerName = ref('')
@@ -169,7 +177,11 @@ const generateOrderMessage = () => {
     }
     message += `🍬 Sugar: ${item.sugar ?? 100}%\n`
     message += `📦 Qty  : ${item.quantity}\n`
-    message += `💵 Price: $${lineTotal(item).toFixed(2)}\n`
+    if (hasDiscount(item)) {
+      message += `💵 Price: $${lineTotal(item).toFixed(2)} (was $${(lineTotal(item) + lineDiscount(item)).toFixed(2)}, save $${lineDiscount(item).toFixed(2)})\n`
+    } else {
+      message += `💵 Price: $${lineTotal(item).toFixed(2)}\n`
+    }
 
     if (index < cart.value.length - 1) {
       message += `\n────────────────────\n\n`
@@ -177,6 +189,9 @@ const generateOrderMessage = () => {
   })
 
   message += `\n════════════════════\n`
+  if (totalDiscount.value > 0) {
+    message += `🏷️ Discount: -$${totalDiscount.value.toFixed(2)}\n`
+  }
   message += `💰 Total: $${totalPrice.value.toFixed(2)}\n`
   message += `════════════════════`
 
@@ -400,11 +415,34 @@ const handleTelegramCheckout = async () => {
   font-size: 12px;
 }
 
+.row-price-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 3px;
+}
+
 .row-price {
   font-size: 14px;
   font-weight: 600;
   color: var(--ios-blue, #007aff);
-  margin-top: 3px;
+}
+
+.row-old-price {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ios-tertiary, #8e8e93);
+  text-decoration: line-through;
+}
+
+.row-save-chip {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ios-red, #ff3b30);
+  background: rgba(255, 59, 48, 0.1);
+  padding: 2px 6px;
+  border-radius: 10px;
 }
 
 .row-toppings {
@@ -585,6 +623,25 @@ const handleTelegramCheckout = async () => {
   border-top: 0.5px solid var(--ios-separator, rgba(60, 60, 67, 0.12));
   position: relative;
   z-index: 10;
+}
+
+.discount-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.discount-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ios-secondary, #3c3c43);
+}
+
+.discount-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ios-red, #ff3b30);
 }
 
 .total-row {

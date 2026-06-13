@@ -1,6 +1,7 @@
 <template>
   <div class="menu-card" @click="handleAdd">
     <div class="card-image-wrapper">
+      <div class="promo-badge" v-if="hasPromo">-{{ discountPercent }}%</div>
       <img v-if="item.image" :src="resolveImageUrl(item.image)" :alt="item.en" class="card-image" />
       <Transition name="fade">
         <div class="added-overlay" v-if="showToast">
@@ -17,7 +18,10 @@
       <div class="card-chinese" v-if="item.zh">{{ item.zh }}</div>
       
       <div class="card-footer">
-        <div class="card-price">${{ item.price.toFixed(2) }}</div>
+        <div class="card-price-group">
+          <div class="card-price">${{ item.price.toFixed(2) }}</div>
+          <div class="card-old-price" v-if="hasPromo">${{ item.oldPrice.toFixed(2) }}</div>
+        </div>
         <button class="add-btn" @click.stop="handleAdd">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -29,7 +33,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const props = defineProps({
   item: {
@@ -37,6 +41,15 @@ const props = defineProps({
     required: true
   }
 })
+
+const hasPromo = computed(() =>
+  typeof props.item.oldPrice === 'number' && props.item.oldPrice > props.item.price
+)
+const discountPercent = computed(() =>
+  hasPromo.value
+    ? Math.round((1 - props.item.price / props.item.oldPrice) * 100)
+    : 0
+)
 const { addToCart } = useCart()
 const { resolveImageUrl } = useImageUrl()
 const showToast = ref(false)
@@ -145,10 +158,35 @@ const handleAdd = () => {
   justify-content: space-between;
   margin-top: auto;
 }
+.promo-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1;
+  background: var(--ios-red, #ff3b30);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  padding: 3px 7px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+}
+.card-price-group {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
 .card-price {
   font-size: 15px;
   font-weight: 700;
   color: var(--ios-blue, #007aff);
+}
+.card-old-price {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ios-tertiary, #8e8e93);
+  text-decoration: line-through;
 }
 .add-btn {
   width: 28px;

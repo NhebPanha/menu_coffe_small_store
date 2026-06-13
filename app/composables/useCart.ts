@@ -11,6 +11,7 @@ export interface CartItem {
   en: string
   zh: string
   price: number
+  oldPrice?: number
   quantity: number
   image?: string
   toppings: Toppings
@@ -37,6 +38,17 @@ export const unitPrice = (item: CartItem): number =>
 
 // price of the whole line (unit price × quantity)
 export const lineTotal = (item: CartItem): number => unitPrice(item) * item.quantity
+
+// whether this item is on promotion
+export const hasDiscount = (item: CartItem): boolean =>
+  typeof item.oldPrice === 'number' && item.oldPrice > item.price
+
+// per-unit money saved by the promotion (0 if not on promo)
+export const unitDiscount = (item: CartItem): number =>
+  hasDiscount(item) ? (item.oldPrice as number) - item.price : 0
+
+// money saved across the whole line (per-unit saving × quantity)
+export const lineDiscount = (item: CartItem): number => unitDiscount(item) * item.quantity
 
 export const useCart = () => {
   const cart = useState<CartItem[]>('cart', () => [])
@@ -85,6 +97,8 @@ export const useCart = () => {
 
   const totalItems = computed(() => cart.value.reduce((acc, item) => acc + item.quantity, 0))
   const totalPrice = computed(() => cart.value.reduce((acc, item) => acc + lineTotal(item), 0))
+  // total money saved by promotions across the whole cart
+  const totalDiscount = computed(() => cart.value.reduce((acc, item) => acc + lineDiscount(item), 0))
 
   return {
     cart,
@@ -95,6 +109,7 @@ export const useCart = () => {
     setSugar,
     clearCart,
     totalItems,
-    totalPrice
+    totalPrice,
+    totalDiscount
   }
 }
