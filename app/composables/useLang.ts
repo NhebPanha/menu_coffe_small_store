@@ -21,7 +21,12 @@ const dict = {
   emptySubtitle:    { en: 'Drinks you add will show up here.', kh: 'ភេសជ្ជៈដែលអ្នកបន្ថែមនឹងបង្ហាញនៅទីនេះ។' },
   sugar:            { en: 'Sugar', kh: 'ស្ករ' },
   cream:            { en: 'Cream', kh: 'ក្រ៉ីម' },
-  pearls:           { en: 'Pearls', kh: 'គុជ' }
+  pearls:           { en: 'Pearls', kh: 'គុជ' },
+  chatTitle:        { en: 'Support', kh: 'ជំនួយ' },
+  chatSubtitle:     { en: "We're here to help", kh: 'យើងនៅទីនេះដើម្បីជួយ' },
+  chatPlaceholder:  { en: 'Type a message…', kh: 'វាយសារ…' },
+  chatGreeting:     { en: 'Hi! 👋 How can we help you today?', kh: 'សួស្ដី! 👋 តើយើងអាចជួយអ្វីបានថ្ងៃនេះ?' },
+  chatError:        { en: 'Sorry, something went wrong. Please try again.', kh: 'សុំទោស មានបញ្ហា។ សូមព្យាយាមម្ដងទៀត។' }
 } satisfies Record<string, Entry>
 
 export type TKey = keyof typeof dict

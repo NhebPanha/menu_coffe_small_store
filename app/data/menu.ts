@@ -5,6 +5,14 @@ export const menuData = [
   {
     category: "Coffee",
     items: [
+      {
+        id: "c1",
+        kh: "កាហ្វេទឹកដោះគោ",
+        en: "Milk Coffee",
+        zh: "牛奶咖啡",
+        price: 1.25,
+        image: "https://i.pinimg.com/736x/a2/e2/a1/a2e2a153a2fef3ae3ee3f7c991cf6f18.jpg"
+      },
       { id: "c1", kh: "កាហ្វេទឹកដោះគោ", en: "Milk Coffee", zh: "牛奶咖啡", price: 1.25, image: IMG("1461023058943-07fcbe16d735") },
       { id: "c2", kh: "កាហ្វេទឹកកក", en: "Iced Coffee", zh: "冰咖啡", price: 1.00, image: IMG("1572442388796-11668a67e53d") },
       { id: "c3", kh: "អាយកាពូឈីណូ", en: "Iced Cappuccino", zh: "冰卡布奇诺", price: 1.25, image: IMG("1509042239860-f550ce710b93") },

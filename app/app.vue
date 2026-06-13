@@ -30,6 +30,7 @@
     
     <Cart :is-open="isCartOpen" @close="isCartOpen = false" />
     <QrGenerator :is-open="isQrOpen" @close="isQrOpen = false" />
+    <ChatWidget />
   </div>
 </template>
 
