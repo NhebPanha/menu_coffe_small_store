@@ -242,7 +242,8 @@ const handlePrint = () => {
   z-index: 1000;
   box-shadow: 10px 0 30px rgba(0,0,0,0.12);
   transform: translateX(-100%);
-  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+              background-color 0.3s ease;
   display: flex;
   flex-direction: column;
 }
@@ -261,7 +262,7 @@ const handlePrint = () => {
 
 .modal-header {
   height: 52px;
-  background: rgba(249, 249, 249, 0.85);
+  background: var(--ios-nav-bg, rgba(249, 249, 249, 0.85));
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 0.5px solid var(--ios-separator, rgba(60, 60, 67, 0.12));
@@ -271,6 +272,7 @@ const handlePrint = () => {
   padding: 0 8px;
   position: relative;
   z-index: 10;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .nav-title {
@@ -280,9 +282,10 @@ const handlePrint = () => {
   font-size: 17px;
   font-weight: 600;
   letter-spacing: -0.4px;
-  color: #000;
+  color: var(--ios-label, #000);
   pointer-events: none;
   white-space: nowrap;
+  transition: color 0.3s ease;
 }
 
 .nav-text-btn {
@@ -403,7 +406,7 @@ const handlePrint = () => {
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.4px;
-  color: #6c6c70;
+  color: var(--ios-tertiary, #6c6c70);
   margin: 0 16px 8px;
 }
 
@@ -413,6 +416,7 @@ const handlePrint = () => {
   margin-bottom: 24px;
   overflow: hidden;
   box-shadow: 0 0 0 0.5px rgba(0,0,0,0.04);
+  transition: background-color 0.3s ease;
 }
 
 .input-row {
@@ -434,9 +438,10 @@ const handlePrint = () => {
   background: transparent;
   font-family: inherit;
   font-size: 16px;
-  color: #000;
+  color: var(--ios-label, #000);
   outline: none;
   padding: 4px 0;
+  transition: color 0.3s ease;
 }
 
 .ios-input::placeholder {

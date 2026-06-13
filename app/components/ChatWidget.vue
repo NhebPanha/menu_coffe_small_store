@@ -90,6 +90,8 @@ const draft = ref('')
 const isSending = ref(false)
 const messages = ref([])
 const scrollEl = ref(null)
+// Carries an in-progress order (e.g. waiting for the customer's name) between turns
+const pending = ref(null)
 
 const scrollToBottom = async () => {
   await nextTick()
@@ -118,9 +120,10 @@ const send = async () => {
   try {
     const res = await $fetch('/api/chat/send', {
       method: 'POST',
-      body: { message: text, lang: lang.value }
+      body: { message: text, lang: lang.value, pending: pending.value }
     })
     if (res?.success && res.reply) {
+      pending.value = res.pending ?? null
       messages.value.push({ from: 'bot', text: res.reply })
     } else {
       messages.value.push({ from: 'bot', text: t('chatError') })

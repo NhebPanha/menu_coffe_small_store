@@ -78,6 +78,35 @@ const listCategory = (category: string, lang: Lang): string => {
   return `${catLabel(category, lang)}:\n${items.map(p => formatProduct(p, lang)).join('\n')}`
 }
 
+// ── Ordering ──
+type Pending = { stage: 'awaitingName'; items: Product[] }
+
+// The customer wants to place an order
+const isOrderIntent = (text: string): boolean =>
+  /\b(order|buy|purchase|i'?ll have|i'?ll take|i want|i'?d like|get me|can i (get|have))\b/.test(text) ||
+  /(កម្ម៉ង់|កុម្ម៉ង់|ទិញ|យក|ខ្ញុំចង់)/.test(text)
+
+// The customer wants to abandon the pending order
+const isCancel = (text: string): boolean =>
+  /\b(cancel|never ?mind|forget it|stop)\b/.test(text.toLowerCase()) ||
+  /(បោះបង់|លុបចោល)/.test(text)
+
+// Pull a clean name out of replies like "my name is John" / "ឈ្មោះខ្ញុំ John"
+const extractName = (text: string): string =>
+  text
+    .replace(/^\s*(my name is|i am|i'?m|name is|name:|this is|it'?s|call me)\s+/i, '')
+    .replace(/^\s*(ឈ្មោះ(ខ្ញុំ)?(គឺ)?)\s*/, '')
+    .replace(/[.!។]+$/, '')
+    .trim()
+
+const orderTotal = (items: Product[]) => items.reduce((sum, p) => sum + p.price, 0)
+
+// Summary of the items being ordered, one per line, with the total
+const orderSummary = (items: Product[], lang: Lang): string =>
+  `${items.map(p => formatProduct(p, lang)).join('\n')}\n${
+    lang === 'kh' ? 'សរុប' : 'Total'
+  }: ${money(orderTotal(items))}`
+
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event)
@@ -87,7 +116,45 @@ export default defineEventHandler(async (event) => {
     // Reply in Khmer if the app is set to Khmer OR the message contains Khmer text
     const lang: Lang = body?.lang === 'kh' || hasKhmer(msg) ? 'kh' : 'en'
     const categories = [...new Set(menuData.map(c => c.category))]
+    const pending: Pending | null =
+      body?.pending?.stage === 'awaitingName' && Array.isArray(body.pending.items)
+        ? (body.pending as Pending)
+        : null
     let reply = ''
+    // The order state to hand back to the client (null clears it)
+    let nextPending: Pending | null = null
+
+    // ── We asked for the customer's name and are waiting for it ──
+    if (pending) {
+      if (!msg) {
+        nextPending = pending
+        reply =
+          lang === 'kh'
+            ? 'សូមប្រាប់ឈ្មោះរបស់អ្នកសម្រាប់ការកម្ម៉ង់ ☺️'
+            : 'Please tell me your name for the order ☺️'
+      } else if (isCancel(msg)) {
+        reply =
+          lang === 'kh'
+            ? 'បានបោះបង់ការកម្ម៉ង់។ ប្រាប់ខ្ញុំនៅពេលអ្នកត្រៀមរួច! ☕'
+            : 'Order cancelled. Let me know whenever you\'re ready! ☕'
+      } else {
+        const name = extractName(msg)
+        if (!name) {
+          // No name given → keep waiting; the order cannot be placed without one
+          nextPending = pending
+          reply =
+            lang === 'kh'
+              ? 'សុំទោស ខ្ញុំមិនអាចកម្ម៉ង់ដោយគ្មានឈ្មោះបានទេ។ សូមប្រាប់ឈ្មោះរបស់អ្នក 🙏'
+              : "Sorry, I can't place the order without a name. Please tell me your name 🙏"
+        } else {
+          reply =
+            lang === 'kh'
+              ? `អរគុណ ${name}! ✅ ការកម្ម៉ង់របស់អ្នក៖\n${orderSummary(pending.items, lang)}\nយើងនឹងរៀបចំជូនក្នុងពេលឆាប់ៗ។ ☕`
+              : `Thank you, ${name}! ✅ Your order:\n${orderSummary(pending.items, lang)}\nWe'll have it ready shortly. ☕`
+        }
+      }
+      return { success: true, reply, pending: nextPending }
+    }
 
     if (!msg) {
       reply =
@@ -99,6 +166,21 @@ export default defineEventHandler(async (event) => {
         lang === 'kh'
           ? 'សួស្ដី! 👋 ខ្ញុំអាចជួយរកភេសជ្ជៈ និងតម្លៃ។ សាកសួរ "ម៉ឺនុយ", "ម៉ាតឆា" ឬ "តម្លៃ អាយឡាតេ"។'
           : 'Hello! 👋 I can help you find a drink and its price. Try "show menu", "matcha", or "how much is Iced Latte?"'
+    } else if (isOrderIntent(msg)) {
+      // Customer wants to order → confirm items, then require their name
+      const items = findProducts(msg)
+      if (items.length === 0) {
+        reply =
+          lang === 'kh'
+            ? 'បាទ/ចាស! តើអ្នកចង់កម្ម៉ង់អ្វី? ប្រាប់ឈ្មោះភេសជ្ជៈ ដូចជា "អាយឡាតេ"។'
+            : 'Sure! What would you like to order? Just tell me a drink name like "Iced Latte".'
+      } else {
+        nextPending = { stage: 'awaitingName', items }
+        reply =
+          lang === 'kh'
+            ? `ល្អណាស់! 🧾 អ្នកកំពុងកម្ម៉ង់៖\n${orderSummary(items, lang)}\n\nសូមប្រាប់ឈ្មោះរបស់អ្នកសម្រាប់ការកម្ម៉ង់?`
+            : `Great choice! 🧾 You're ordering:\n${orderSummary(items, lang)}\n\nMay I have your name for the order?`
+      }
     } else {
       // 1) Specific product mention → name + price (+ category)
       const matched = findProducts(msg)
@@ -157,7 +239,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    return { success: true, reply }
+    return { success: true, reply, pending: nextPending }
   } catch (error) {
     return {
       success: false,
